@@ -19,7 +19,7 @@
         <module>happyseven-files-image</module>
         <module>happyseven-files-slide</module>
         <module>happyseven-files-web</module>
-        <module>happyseven-base</module>
+        <module>happyseven-files-base</module>
     </modules>
 
 
