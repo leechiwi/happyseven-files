@@ -1,22 +1,21 @@
 package org.leechiwi.happyseven.files.barcode;
 
-import com.aspose.barcode.barcoderecognition.SingleDecodeType;
-import com.aspose.barcode.generation.BarCodeImageFormat;
-import com.aspose.barcode.generation.BaseEncodeType;
 import org.apache.commons.lang3.StringUtils;
+import org.leechiwi.happyseven.files.barcode.enums.BarCodeImageFormat;
+import org.leechiwi.happyseven.files.barcode.enums.BarcodeClassifications;
 
 import java.awt.image.BufferedImage;
 import java.io.OutputStream;
 import java.util.List;
 
 public interface Barcode {
-    List<String> getBarcodeText(Object image, SingleDecodeType codeType);
+    List<String> getBarcodeText(Object image);
 
-    default String getSingleBarcodeText(Object image, SingleDecodeType codeType){
+    default String getSingleBarcodeText(Object image){
         return StringUtils.EMPTY;
     }
 
-    BufferedImage CreateBarcode(String text, BaseEncodeType baseEncodeType, OutputStream out, BarCodeImageFormat barCodeImageFormat);
+    BufferedImage CreateBarcode(String text, OutputStream out, BarcodeClassifications barcodeClassifications, BarCodeImageFormat barCodeImageFormat);
 
-    void CreateBarcode(String text, BaseEncodeType baseEncodeType,OutputStream out);
+    void CreateBarcode(String text, OutputStream out);
 }

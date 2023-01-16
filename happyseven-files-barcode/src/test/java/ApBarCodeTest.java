@@ -1,10 +1,6 @@
-import com.aspose.barcode.barcoderecognition.DecodeType;
-import com.aspose.barcode.barcoderecognition.SingleDecodeType;
-import com.aspose.barcode.generation.BarcodeClassifications;
-import com.aspose.barcode.generation.BaseEncodeType;
 import org.junit.Test;
 import org.leechiwi.happyseven.files.barcode.ap.ApBarcode;
-import org.leechiwi.happyseven.files.barcode.ap.encodetype.CustomEncodeType;
+import org.leechiwi.happyseven.files.barcode.enums.BarcodeType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,21 +10,19 @@ import java.io.OutputStream;
 public class ApBarCodeTest {
     @Test
     public void  getBarcodeText(){
-        ApBarcode apBarcode = new ApBarcode();
-        String codeText=apBarcode.getSingleBarcodeText("d:/新建文件夹123456/111.png", DecodeType.CODE_128);
+        ApBarcode apBarcode = new ApBarcode(BarcodeType.CODE_128);
+        String codeText=apBarcode.getSingleBarcodeText("d:/新建文件夹123456/111.png");
         System.out.println(codeText);
     }
     @Test
     public void createBarcode(){
-        ApBarcode apBarcode = new ApBarcode();
+        ApBarcode apBarcode = new ApBarcode(BarcodeType.CODE_128);
         OutputStream out=null;
         try {
             out=new FileOutputStream(new File("d:/barcode.jpg"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        SingleDecodeType code128 = DecodeType.CODE_128;
-        BaseEncodeType baseEncodeType=new CustomEncodeType(code128.getTypeIndex(),code128.getTypeName(),BarcodeClassifications.NONE);
-        apBarcode.CreateBarcode("1017227329895", baseEncodeType, out);
+        apBarcode.CreateBarcode("1017227329895", out);
     }
 }

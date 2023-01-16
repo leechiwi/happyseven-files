@@ -3,14 +3,19 @@ package org.leechiwi.happyseven.files.barcode.ap;
 import com.aspose.barcode.barcoderecognition.BarCodeReader;
 import com.aspose.barcode.barcoderecognition.BarCodeResult;
 import com.aspose.barcode.barcoderecognition.SingleDecodeType;
-import com.aspose.barcode.generation.BarCodeImageFormat;
-import com.aspose.barcode.generation.BarcodeClassifications;
 import com.aspose.barcode.generation.BarcodeGenerator;
 import com.aspose.barcode.generation.BaseEncodeType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.leechiwi.happyseven.files.barcode.Barcode;
+import org.leechiwi.happyseven.files.barcode.ap.factory.ApBarCodeImageFormatFactory;
+import org.leechiwi.happyseven.files.barcode.ap.factory.ApBarcodeClassificationsFactory;
+import org.leechiwi.happyseven.files.barcode.enums.BarCodeImageFormat;
+import org.leechiwi.happyseven.files.barcode.enums.BarcodeClassifications;
+import org.leechiwi.happyseven.files.barcode.enums.BarcodeType;
+import org.leechiwi.happyseven.files.barcode.ap.encodetype.CustomEncodeType;
+import org.leechiwi.happyseven.files.barcode.ap.factory.ApBarcodeTypeFactory;
 import org.leechiwi.happyseven.files.base.read.ImageRead;
 
 import java.awt.image.BufferedImage;
@@ -21,10 +26,16 @@ import java.util.List;
 import java.util.Objects;
 @Slf4j
 public class ApBarcode implements Barcode {
+    private BarcodeType barcodeType;
+    public ApBarcode(BarcodeType barcodeType){
+        this.barcodeType=barcodeType;
+    }
     @Override
-    public List<String> getBarcodeText(Object image, SingleDecodeType codeType) {
+    public List<String> getBarcodeText(Object image) {
         List<String> result = new ArrayList<>();
-        BarCodeResult[] barCodeResults = getBarCode(image, codeType);
+        ApBarcodeTypeFactory factory=new ApBarcodeTypeFactory();
+        SingleDecodeType singleDecodeType = factory.convertBarcode(this.barcodeType);
+        BarCodeResult[] barCodeResults = getBarCode(image, singleDecodeType);
         if(Objects.isNull(barCodeResults)||barCodeResults.length==0){
             return result;
         }
@@ -33,8 +44,8 @@ public class ApBarcode implements Barcode {
         }
         return result;
     }
-    public String getSingleBarcodeText(Object image, SingleDecodeType codeType){
-        List<String> barcodeTextList = getBarcodeText(image, codeType);
+    public String getSingleBarcodeText(Object image){
+        List<String> barcodeTextList = getBarcodeText(image);
         if(CollectionUtils.isEmpty(barcodeTextList)){
             return StringUtils.EMPTY;
         }
@@ -50,20 +61,23 @@ public class ApBarcode implements Barcode {
         result = reader.readBarCodes();
         return result;
     }
-    public BufferedImage CreateBarcode(String text, BaseEncodeType baseEncodeType, OutputStream out, BarCodeImageFormat barCodeImageFormat){
+    public BufferedImage CreateBarcode(String text, OutputStream out, BarcodeClassifications barcodeClassifications, BarCodeImageFormat barCodeImageFormat){
         BufferedImage bufferedImage=null;
+        SingleDecodeType singleDecodeType = new ApBarcodeTypeFactory().convertBarcode(this.barcodeType);
+        BaseEncodeType baseEncodeType=new CustomEncodeType(singleDecodeType.getTypeIndex(),singleDecodeType.getTypeName(),new ApBarcodeClassificationsFactory().convertBarcodeClassifications(barcodeClassifications));
         BarcodeGenerator barcodeGenerator=new BarcodeGenerator(baseEncodeType, text);
         try {
             bufferedImage = barcodeGenerator.generateBarCodeImage();
             if(Objects.nonNull(out)) {
-                barcodeGenerator.save(out, barCodeImageFormat);
+                com.aspose.barcode.generation.BarCodeImageFormat apBarCodeImageFormat = new ApBarCodeImageFormatFactory().convertBarCodeImageFormat(barCodeImageFormat);
+                barcodeGenerator.save(out, apBarCodeImageFormat);
             }
         } catch (IOException e) {
             log.error("CreateBarcode error",e);
         }
         return bufferedImage;
     }
-    public void CreateBarcode(String text, BaseEncodeType baseEncodeType,OutputStream out){
-        CreateBarcode(text,baseEncodeType,out, BarCodeImageFormat.JPEG);
+    public void CreateBarcode(String text,OutputStream out){
+        CreateBarcode(text,out, BarcodeClassifications.NONE,BarCodeImageFormat.JPEG);
     }
 }
