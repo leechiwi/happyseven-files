@@ -68,7 +68,8 @@ public enum BarcodeType {
     CODE_32  ((short)61, "Code32"),
     DATA_LOGIC_2_OF_5  ((short)62, "DataLogic2of5"),
     DOT_CODE  ((short)63, "DotCode"),
-    DUTCH_KIX  ((short)64, "DutchKIX");
+    DUTCH_KIX  ((short)64, "DutchKIX"),
+    UPC_EAN_EXTENSION  ((short)65, "UPCEANExtension");
     private String name;
     private short code;
     private BarcodeType(short code,String name){
