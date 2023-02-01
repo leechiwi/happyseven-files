@@ -9,9 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.leechiwi.happyseven.files.barcode.Barcode;
-import org.leechiwi.happyseven.files.barcode.ap.factory.ApBarCodeImageFormatFactory;
+import org.leechiwi.happyseven.files.barcode.ap.factory.ApImageFormatFactory;
 import org.leechiwi.happyseven.files.barcode.ap.factory.ApBarcodeClassificationsFactory;
-import org.leechiwi.happyseven.files.barcode.enums.BarCodeImageFormat;
+import org.leechiwi.happyseven.files.base.enums.ImageFormat;
 import org.leechiwi.happyseven.files.barcode.enums.BarcodeClassifications;
 import org.leechiwi.happyseven.files.barcode.enums.BarcodeType;
 import org.leechiwi.happyseven.files.barcode.ap.encodetype.CustomEncodeType;
@@ -61,7 +61,7 @@ public class ApBarcode implements Barcode {
         result = reader.readBarCodes();
         return result;
     }
-    public BufferedImage CreateBarcode(String text, OutputStream out, BarcodeClassifications barcodeClassifications, BarCodeImageFormat barCodeImageFormat){
+    public BufferedImage CreateBarcode(String text, OutputStream out, BarcodeClassifications barcodeClassifications, ImageFormat imageFormat){
         BufferedImage bufferedImage=null;
         SingleDecodeType singleDecodeType = new ApBarcodeTypeFactory().convertBarcode(this.barcodeType);
         BaseEncodeType baseEncodeType=new CustomEncodeType(singleDecodeType.getTypeIndex(),singleDecodeType.getTypeName(),new ApBarcodeClassificationsFactory().convertBarcodeClassifications(barcodeClassifications));
@@ -69,7 +69,7 @@ public class ApBarcode implements Barcode {
         try {
             bufferedImage = barcodeGenerator.generateBarCodeImage();
             if(Objects.nonNull(out)) {
-                com.aspose.barcode.generation.BarCodeImageFormat apBarCodeImageFormat = new ApBarCodeImageFormatFactory().convertBarCodeImageFormat(barCodeImageFormat);
+                com.aspose.barcode.generation.BarCodeImageFormat apBarCodeImageFormat = new ApImageFormatFactory().convertBarCodeImageFormat(imageFormat);
                 barcodeGenerator.save(out, apBarCodeImageFormat);
             }
         } catch (IOException e) {
@@ -78,6 +78,6 @@ public class ApBarcode implements Barcode {
         return bufferedImage;
     }
     public void CreateBarcode(String text,OutputStream out){
-        CreateBarcode(text,out, BarcodeClassifications.NONE,BarCodeImageFormat.JPEG);
+        CreateBarcode(text,out, BarcodeClassifications.NONE, ImageFormat.JPEG);
     }
 }

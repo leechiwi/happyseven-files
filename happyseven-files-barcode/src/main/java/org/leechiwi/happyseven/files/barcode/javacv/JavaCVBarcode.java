@@ -8,17 +8,12 @@ import org.bytedeco.opencv.opencv_barcode.BarcodeDetector;
 import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.StringVector;
 import org.leechiwi.happyseven.files.barcode.Barcode;
-import org.leechiwi.happyseven.files.barcode.enums.BarCodeImageFormat;
+import org.leechiwi.happyseven.files.base.enums.ImageFormat;
 import org.leechiwi.happyseven.files.barcode.enums.BarcodeClassifications;
-import org.leechiwi.happyseven.files.barcode.enums.BarcodeType;
 import org.leechiwi.happyseven.files.barcode.javacv.entity.DecodeResult;
 import org.leechiwi.happyseven.files.base.read.ImageRead;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +60,7 @@ public class JavaCVBarcode implements Barcode {
         return decodeResult;
     }
     @Override
-    public BufferedImage CreateBarcode(String text, OutputStream out, BarcodeClassifications barcodeClassifications, BarCodeImageFormat barCodeImageFormat) {
+    public BufferedImage CreateBarcode(String text, OutputStream out, BarcodeClassifications barcodeClassifications, ImageFormat imageFormat) {
         return null;
     }
 

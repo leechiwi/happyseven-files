@@ -2,7 +2,7 @@ package org.leechiwi.happyseven.files.barcode.javacv;
 
 import org.apache.commons.lang3.StringUtils;
 import org.leechiwi.happyseven.files.barcode.Barcode;
-import org.leechiwi.happyseven.files.barcode.enums.BarCodeImageFormat;
+import org.leechiwi.happyseven.files.base.enums.ImageFormat;
 import org.leechiwi.happyseven.files.barcode.enums.BarcodeClassifications;
 import org.leechiwi.happyseven.files.barcode.enums.BarcodeType;
 
@@ -48,7 +48,7 @@ public class JavaCVBarcodeProxy implements Barcode {
         return supportTypeMap.containsKey(this.barcodeType);
     }
     @Override
-    public BufferedImage CreateBarcode(String text, OutputStream out, BarcodeClassifications barcodeClassifications, BarCodeImageFormat barCodeImageFormat) {
+    public BufferedImage CreateBarcode(String text, OutputStream out, BarcodeClassifications barcodeClassifications, ImageFormat imageFormat) {
         return null;
     }
 

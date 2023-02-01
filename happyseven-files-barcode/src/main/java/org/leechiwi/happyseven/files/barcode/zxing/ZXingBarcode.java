@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.leechiwi.happyseven.files.barcode.Barcode;
-import org.leechiwi.happyseven.files.barcode.enums.BarCodeImageFormat;
+import org.leechiwi.happyseven.files.base.enums.ImageFormat;
 import org.leechiwi.happyseven.files.barcode.enums.BarcodeClassifications;
 import org.leechiwi.happyseven.files.barcode.enums.BarcodeType;
 import org.leechiwi.happyseven.files.barcode.zxing.factory.WriterFactory;
@@ -69,14 +69,14 @@ public class ZXingBarcode implements Barcode {
     }
 
     @Override
-    public BufferedImage CreateBarcode(String text, OutputStream out, BarcodeClassifications barcodeClassifications, BarCodeImageFormat barCodeImageFormat) {
+    public BufferedImage CreateBarcode(String text, OutputStream out, BarcodeClassifications barcodeClassifications, ImageFormat imageFormat) {
         BufferedImage result = null;
         try {
             BarcodeFormat barcodeFormat = new ZXingBarcodeTypeFactory().convertBarcode(this.barcodeType);
             BitMatrix bitMatrix = writer.encode(text, barcodeFormat, 195, 40, null);
             result = MatrixToImageWriter.toBufferedImage(bitMatrix);
             if (Objects.nonNull(out)) {
-                MatrixToImageWriter.writeToStream(bitMatrix, barCodeImageFormat.getName(), out);
+                MatrixToImageWriter.writeToStream(bitMatrix, imageFormat.getName(), out);
             }
         } catch (WriterException e) {
             e.printStackTrace();
@@ -88,6 +88,6 @@ public class ZXingBarcode implements Barcode {
 
     @Override
     public void CreateBarcode(String text, OutputStream out) {
-        CreateBarcode(text, out, null, BarCodeImageFormat.JPEG);
+        CreateBarcode(text, out, null, ImageFormat.JPEG);
     }
 }

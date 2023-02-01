@@ -3,15 +3,16 @@ package org.leechiwi.happyseven.files.qrcode.ap;
 import com.aspose.barcode.barcoderecognition.BarCodeReader;
 import com.aspose.barcode.barcoderecognition.BarCodeResult;
 import com.aspose.barcode.barcoderecognition.DecodeType;
-import com.aspose.barcode.generation.BarCodeImageFormat;
 import com.aspose.barcode.generation.BarcodeGenerator;
 import com.aspose.barcode.generation.EncodeTypes;
 import com.aspose.barcode.generation.QRVersion;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.leechiwi.happyseven.files.base.enums.ImageFormat;
 import org.leechiwi.happyseven.files.base.read.ImageRead;
 import org.leechiwi.happyseven.files.qrcode.Qrcode;
+import org.leechiwi.happyseven.files.qrcode.ap.factory.ApImageFormatFactory;
 import org.leechiwi.happyseven.files.qrcode.ap.factory.ApQrcodeTypeFactory;
 import org.leechiwi.happyseven.files.qrcode.enums.QrcodeType;
 
@@ -24,12 +25,19 @@ import java.util.Objects;
 @Slf4j
 public class ApQrcode implements Qrcode {
     private QrcodeType qrcodeType;
-
-    public ApQrcode(QrcodeType qrcodeType) {
+    private ImageFormat imageFormat;
+    public ApQrcode(QrcodeType qrcodeType,ImageFormat imageFormat) {
         this.qrcodeType = qrcodeType;
+        this.imageFormat=imageFormat;
+    }
+    public ApQrcode(QrcodeType qrcodeType) {
+        this(qrcodeType,ImageFormat.JPEG);
+    }
+    public ApQrcode(ImageFormat imageFormat) {
+        this(QrcodeType.FORCE_QR,imageFormat);
     }
     public ApQrcode() {
-        this.qrcodeType = QrcodeType.FORCE_MICRO_QR;
+        this(QrcodeType.FORCE_QR,ImageFormat.JPEG);
     }
     @Override
     public List<String> getQrcodeText(Object image) {
@@ -74,7 +82,7 @@ public class ApQrcode implements Qrcode {
         BufferedImage bufferedImage = gen.generateBarCodeImage();
         if(Objects.nonNull(out)){
             try {
-                gen.save(out, BarCodeImageFormat.PNG);
+                gen.save(out, new ApImageFormatFactory().convertBarCodeImageFormat(this.imageFormat));
             } catch (IOException e) {
                log.error("apqrcode create outputstream error",e);
             }

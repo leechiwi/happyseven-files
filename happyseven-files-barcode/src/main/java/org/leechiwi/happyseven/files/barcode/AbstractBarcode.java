@@ -1,7 +1,7 @@
 package org.leechiwi.happyseven.files.barcode;
 
 import org.apache.commons.lang3.StringUtils;
-import org.leechiwi.happyseven.files.barcode.enums.BarCodeImageFormat;
+import org.leechiwi.happyseven.files.base.enums.ImageFormat;
 import org.leechiwi.happyseven.files.barcode.enums.BarcodeClassifications;
 
 import java.awt.image.BufferedImage;
@@ -35,7 +35,7 @@ public abstract class AbstractBarcode implements Barcode {
     }
 
     @Override
-    public BufferedImage CreateBarcode(String text, OutputStream out, BarcodeClassifications barcodeClassifications, BarCodeImageFormat barCodeImageFormat) {
+    public BufferedImage CreateBarcode(String text, OutputStream out, BarcodeClassifications barcodeClassifications, ImageFormat imageFormat) {
         return null;
     }
 
