@@ -1,6 +1,6 @@
 package org.leechiwi.happyseven.files.qrcode.ap.factory;
 
-import com.aspose.barcode.generation.BarCodeImageFormat;
+import com.aspose.barcode.BarCodeImageFormat;
 import org.leechiwi.happyseven.files.base.ImageFormatFactory;
 import org.leechiwi.happyseven.files.base.enums.ImageFormat;
 

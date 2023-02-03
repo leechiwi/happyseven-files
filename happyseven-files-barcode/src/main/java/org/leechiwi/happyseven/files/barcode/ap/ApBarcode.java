@@ -1,21 +1,21 @@
 package org.leechiwi.happyseven.files.barcode.ap;
 
+import com.aspose.barcode.BaseEncodeType;
 import com.aspose.barcode.barcoderecognition.BarCodeReader;
 import com.aspose.barcode.barcoderecognition.BarCodeResult;
 import com.aspose.barcode.barcoderecognition.SingleDecodeType;
 import com.aspose.barcode.generation.BarcodeGenerator;
-import com.aspose.barcode.generation.BaseEncodeType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.leechiwi.happyseven.files.barcode.Barcode;
-import org.leechiwi.happyseven.files.barcode.ap.factory.ApImageFormatFactory;
+import org.leechiwi.happyseven.files.barcode.ap.encodetype.CustomEncodeType;
 import org.leechiwi.happyseven.files.barcode.ap.factory.ApBarcodeClassificationsFactory;
-import org.leechiwi.happyseven.files.base.enums.ImageFormat;
+import org.leechiwi.happyseven.files.barcode.ap.factory.ApBarcodeTypeFactory;
+import org.leechiwi.happyseven.files.barcode.ap.factory.ApImageFormatFactory;
 import org.leechiwi.happyseven.files.barcode.enums.BarcodeClassifications;
 import org.leechiwi.happyseven.files.barcode.enums.BarcodeType;
-import org.leechiwi.happyseven.files.barcode.ap.encodetype.CustomEncodeType;
-import org.leechiwi.happyseven.files.barcode.ap.factory.ApBarcodeTypeFactory;
+import org.leechiwi.happyseven.files.base.enums.ImageFormat;
 import org.leechiwi.happyseven.files.base.read.ImageRead;
 
 import java.awt.image.BufferedImage;
@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 @Slf4j
-public class ApBarcode implements Barcode {
+public class ApBarcode extends BarcodeLicense implements Barcode {
     private BarcodeType barcodeType;
     public ApBarcode(BarcodeType barcodeType){
         this.barcodeType=barcodeType;
@@ -69,7 +69,7 @@ public class ApBarcode implements Barcode {
         try {
             bufferedImage = barcodeGenerator.generateBarCodeImage();
             if(Objects.nonNull(out)) {
-                com.aspose.barcode.generation.BarCodeImageFormat apBarCodeImageFormat = new ApImageFormatFactory().convertBarCodeImageFormat(imageFormat);
+                com.aspose.barcode.BarCodeImageFormat apBarCodeImageFormat = new ApImageFormatFactory().convertBarCodeImageFormat(imageFormat);
                 barcodeGenerator.save(out, apBarCodeImageFormat);
             }
         } catch (IOException e) {

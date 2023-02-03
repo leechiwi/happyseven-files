@@ -1,6 +1,6 @@
 package org.leechiwi.happyseven.files.qrcode.ap.factory;
 
-import com.aspose.barcode.generation.QREncodeType;
+import com.aspose.barcode.QREncodeType;
 import org.leechiwi.happyseven.files.qrcode.QrcodeTypeFactory;
 import org.leechiwi.happyseven.files.qrcode.enums.QrcodeType;
 
