@@ -15,17 +15,23 @@ import java.util.Objects;
 public class ApImage extends ImageLicense implements Image {
     private ImageFormat sourceImageformat;
     private com.aspose.imaging.Image image;
+    private float width;
+    private float height;
 
     public ApImage(ImageFormat sourceImageformat){
-        this.sourceImageformat = sourceImageformat;
+        this(sourceImageformat,null,0,0);
     }
-    public ApImage(ImageFormat sourceImageformat, Object in) {
+    public ApImage(ImageFormat sourceImageformat, Object in,float width,float height) {
         this.sourceImageformat = sourceImageformat;
         if (Objects.nonNull(in)) {
             this.image = createImage(sourceImageformat, in);
         }
+        this.width=width;
+        this.height=height;
     }
-
+    public ApImage(ImageFormat sourceImageformat, Object in){
+        this(sourceImageformat,in,0,0);
+    }
     private com.aspose.imaging.Image createImage(ImageFormat sourceImageformat, Object in) {
         com.aspose.imaging.Image image = null;
         try {
@@ -39,7 +45,7 @@ public class ApImage extends ImageLicense implements Image {
             }
             image = ImageSourceFactory.createImageSource(sourceImageformat, inputStream);
         } catch (Exception e) {
-            throw new HappysevenException("create aspose word Document error", e);
+            throw new HappysevenException("create aspose image Document error", e);
         }
         return image;
     }
@@ -47,8 +53,8 @@ public class ApImage extends ImageLicense implements Image {
     @Override
     public boolean convert(InputStream in, OutputStream out, ImageConvertType imageConvertType) {
         try {
-            com.aspose.imaging.Image image = ImageSourceFactory.createImageSource(sourceImageformat, in);
-            image.save(out, new ApImageConvertTypeFactory().convertImageConvertType(imageConvertType));
+            com.aspose.imaging.Image image = createImage(sourceImageformat, in);
+            image.save(out, new ApImageConvertTypeFactory(this.width,this.height).convertImageConvertType(imageConvertType));
         } catch (HappysevenException e) {
             log.error("aspose image convert stream error");
             return false;
@@ -59,8 +65,8 @@ public class ApImage extends ImageLicense implements Image {
     @Override
     public boolean convert(String in, OutputStream out, ImageConvertType imageConvertType) {
         try {
-            com.aspose.imaging.Image image = ImageSourceFactory.createImageSource(sourceImageformat, in);
-            image.save(out, new ApImageConvertTypeFactory().convertImageConvertType(imageConvertType));
+            com.aspose.imaging.Image image =createImage(sourceImageformat, in);
+            image.save(out, new ApImageConvertTypeFactory(this.width,this.height).convertImageConvertType(imageConvertType));
         } catch (HappysevenException e) {
             log.error("aspose image convert path error");
             return false;
@@ -83,7 +89,7 @@ public class ApImage extends ImageLicense implements Image {
     @Override
     public boolean convertAll(OutputStream out, ImageConvertType imageConvertType) {
         try {
-            this.image.save(out,new ApImageConvertTypeFactory().convertImageConvertType(imageConvertType));
+            this.image.save(out,new ApImageConvertTypeFactory(this.width,this.height).convertImageConvertType(imageConvertType));
         } catch (Exception e) {
             log.error("aspose image convert all error",e);
             return false;

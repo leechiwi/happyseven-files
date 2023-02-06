@@ -1,0 +1,90 @@
+package org.leechiwi.happyseven.files.pdf.ap;
+
+import com.aspose.pdf.Document;
+import lombok.extern.slf4j.Slf4j;
+import org.leechiwi.happyseven.files.pdf.Pdf;
+import org.leechiwi.happyseven.files.pdf.ap.factory.ApPdfConvertTypeFactory;
+import org.leechiwi.happyseven.files.pdf.enums.PdfConvertType;
+
+import java.io.*;
+import java.util.Objects;
+
+@Slf4j
+public class ApPdf extends PdfLicense implements Pdf {
+    private Document document;
+
+    public ApPdf(Object in) {
+        if(Objects.nonNull(in)) {
+            this.document = createDocument(in);
+        }
+    }
+
+    public ApPdf() {
+
+    }
+
+    private Document createDocument(Object document){
+        Document doc=null;
+        try {
+            InputStream inputStream = null;
+            if (document instanceof InputStream) {
+                inputStream = (InputStream) document;
+            } else if (document instanceof File) {
+                inputStream = new FileInputStream((File) document);
+            } else if (document instanceof String) {
+                inputStream = new FileInputStream(new File((String) document));
+            }
+            doc = new Document(inputStream);
+        } catch (Exception e) {
+            log.error("create aspose pdf Document error", e);
+            //throw new HappysevenException("create aspose word Document error", e);
+        }
+        return doc;
+    }
+
+    @Override
+    public boolean convert(InputStream in, OutputStream out, PdfConvertType pdfConvertType) {
+        try {
+            Document document = new Document(in);
+            document.save(out, new ApPdfConvertTypeFactory().convertPdfConvertType(pdfConvertType));
+        }catch(Exception e){
+            log.error("aspose pdf convert stream error", e);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean convert(File file, OutputStream out, PdfConvertType pdfConvertType) {
+        InputStream in = null;
+        try {
+            in = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            log.error("aspose pdf convert file error", e);
+            return false;
+        }
+        return convert(in,out,pdfConvertType);
+    }
+
+    @Override
+    public boolean convert(String path, OutputStream out, PdfConvertType pdfConvertType) {
+        InputStream in = null;
+        try {
+            in = new FileInputStream(new File(path));
+        } catch (FileNotFoundException e) {
+            log.error("aspose pdf convert filepath error", e);
+        }
+        return convert(in,out,pdfConvertType);
+    }
+
+    @Override
+    public boolean convertAll(OutputStream out, PdfConvertType pdfConvertType) {
+        try {
+            document.save(out, new ApPdfConvertTypeFactory().convertPdfConvertType(pdfConvertType));
+        } catch (Exception e) {
+            log.error("aspose pdf convert all error", e);
+            return false;
+        }
+        return true;
+    }
+}

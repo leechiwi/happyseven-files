@@ -1,9 +1,5 @@
 package org.leechiwi.happyseven.files.image.enums;
 
-import com.aspose.imaging.ImageOptionsBase;
-import com.aspose.imaging.fileformats.pdf.PdfDocumentInfo;
-import com.aspose.imaging.imageoptions.*;
-
 public enum ImageConvertType {
     JPEG(".jpg"),
     PNG(".png"),
