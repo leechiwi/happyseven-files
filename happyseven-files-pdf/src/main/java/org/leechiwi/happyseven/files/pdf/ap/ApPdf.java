@@ -2,6 +2,7 @@ package org.leechiwi.happyseven.files.pdf.ap;
 
 import com.aspose.pdf.Document;
 import lombok.extern.slf4j.Slf4j;
+import org.leechiwi.happyseven.files.base.read.FileRead;
 import org.leechiwi.happyseven.files.pdf.Pdf;
 import org.leechiwi.happyseven.files.pdf.ap.factory.ApPdfConvertTypeFactory;
 import org.leechiwi.happyseven.files.pdf.enums.PdfConvertType;
@@ -23,17 +24,14 @@ public class ApPdf extends PdfLicense implements Pdf {
 
     }
 
+    public Document getDocument() {
+        return document;
+    }
+
     private Document createDocument(Object document){
         Document doc=null;
         try {
-            InputStream inputStream = null;
-            if (document instanceof InputStream) {
-                inputStream = (InputStream) document;
-            } else if (document instanceof File) {
-                inputStream = new FileInputStream((File) document);
-            } else if (document instanceof String) {
-                inputStream = new FileInputStream(new File((String) document));
-            }
+            InputStream inputStream = new FileRead().loadFile(document);
             doc = new Document(inputStream);
         } catch (Exception e) {
             log.error("create aspose pdf Document error", e);

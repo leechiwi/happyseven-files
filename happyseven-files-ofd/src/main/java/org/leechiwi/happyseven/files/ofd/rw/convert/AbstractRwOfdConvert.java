@@ -77,24 +77,4 @@ public abstract class AbstractRwOfdConvert implements RwOfdConvert {
             throw new HappysevenException("RwOfd zip error");
         }
     }*/
-
-    protected void zip(OutputStream out, List<byte[]> streamList, String ext) throws HappysevenException {
-        ZipOutputStream zipOut = new ZipOutputStream(out);
-        int index=0;
-        try {
-            for (byte[] bytes : streamList) {
-                // 创建一个ZipEntry
-                zipOut.putNextEntry(new ZipEntry((index++) + ext));
-                // 将源文件的字节内容，写入zip压缩包
-                zipOut.write(bytes);
-                // 结束当前zipEntry
-                zipOut.closeEntry();
-            }
-            zipOut.finish();
-            zipOut.close();
-        } catch (IOException e) {
-            log.error("RwOfd zip error",e);
-            throw new HappysevenException("RwOfd zip error");
-        }
-    }
 }

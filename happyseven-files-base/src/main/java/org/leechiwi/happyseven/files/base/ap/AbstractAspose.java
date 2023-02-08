@@ -13,6 +13,9 @@ public abstract class AbstractAspose {
     protected static InputStream getLicense() {
         return new ByteArrayInputStream(AbstractAspose.LicenseLoader.bytes);
     }
+    protected static String getFontsDir(){
+       return AbstractAspose.class.getClassLoader().getResource("").getPath()+"fonts";
+    }
     private static class LicenseLoader{
         private static final String SECRET_KEY = "c2xAMzl5XipVITVnOEViZQ==";
         private static final String IV_KEY = "0000000000000000";

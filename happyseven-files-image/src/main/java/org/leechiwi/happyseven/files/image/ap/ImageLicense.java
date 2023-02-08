@@ -1,5 +1,6 @@
 package org.leechiwi.happyseven.files.image.ap;
 
+import com.aspose.imaging.FontSettings;
 import lombok.extern.slf4j.Slf4j;
 import org.leechiwi.happyseven.files.base.ap.AbstractAspose;
 
@@ -7,6 +8,7 @@ import org.leechiwi.happyseven.files.base.ap.AbstractAspose;
 public class ImageLicense extends AbstractAspose {
     static{
         loadLicense();
+        loadFonts();
     }
     public static void loadLicense(){
         try {
@@ -14,5 +16,9 @@ public class ImageLicense extends AbstractAspose {
         } catch (Exception e) {
             log.error("aspose-word set license error",e);
         }
+    }
+
+    public static void loadFonts() {
+        FontSettings.setFontsFolder(getFontsDir());
     }
 }

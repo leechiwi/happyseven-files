@@ -1,6 +1,7 @@
 package org.leechiwi.happyseven.files.ofd.rw.convert.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.leechiwi.happyseven.files.base.util.Zip;
 import org.leechiwi.happyseven.files.ofd.rw.convert.AbstractRwOfdConvert;
 import org.ofdrw.converter.ImageMaker;
 import org.ofdrw.reader.OFDReader;
@@ -37,7 +38,7 @@ public class ImageConvert extends AbstractRwOfdConvert {
                 streamList.add(byteArrayOutputStream.toByteArray());
                 byteArrayOutputStream.close();
             }
-            this.zip(out,streamList,".png");
+            Zip.zip(out,streamList,".png");
         } catch (Exception e) {
             log.error("ORDRW ImageConvert failed", e);
             result=false;

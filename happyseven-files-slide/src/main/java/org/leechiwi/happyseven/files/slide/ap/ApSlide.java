@@ -2,6 +2,7 @@ package org.leechiwi.happyseven.files.slide.ap;
 
 import com.aspose.slides.Presentation;
 import lombok.extern.slf4j.Slf4j;
+import org.leechiwi.happyseven.files.base.read.FileRead;
 import org.leechiwi.happyseven.files.slide.Slide;
 import org.leechiwi.happyseven.files.slide.enums.SlideConvertType;
 
@@ -19,14 +20,7 @@ public class ApSlide extends SlideLicense implements Slide {
     private Presentation createDocument(Object document) {
         Presentation slide=null;
         try {
-            InputStream inputStream=null;
-            if(document instanceof InputStream){
-                inputStream=(InputStream) document;
-            }else if(document instanceof File){
-                inputStream=new FileInputStream((File)document);
-            }else if(document instanceof String){
-                inputStream=new FileInputStream(new File((String)document));
-            }
+            InputStream inputStream = new FileRead().loadFile(document);
             slide=new Presentation(inputStream);
         } catch (Exception e) {
             log.error("create aspose slide Document error");

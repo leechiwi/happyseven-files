@@ -1,5 +1,6 @@
 package org.leechiwi.happyseven.files.pdf.enums;
 
+import java.util.EnumSet;
 import java.util.Set;
 
 public enum PdfConvertType {
@@ -21,6 +22,7 @@ public enum PdfConvertType {
         this.code = code;
         this.ext = ext;
     }
+    private static final Set<PdfConvertType> imageTypeSet = EnumSet.of(JPEG, PNG, GIF, BMP);
 
     public int getCode() {
         return this.code;
@@ -28,5 +30,9 @@ public enum PdfConvertType {
 
     public String getExt() {
         return this.ext;
+    }
+
+    public static Set<PdfConvertType> getImageTypeSet(){
+        return imageTypeSet;
     }
 }

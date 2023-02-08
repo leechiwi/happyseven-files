@@ -3,6 +3,7 @@ package org.leechiwi.happyseven.files.image.ap;
 import lombok.extern.slf4j.Slf4j;
 import org.leechiwi.happyseven.files.base.enums.ImageFormat;
 import org.leechiwi.happyseven.files.base.exception.HappysevenException;
+import org.leechiwi.happyseven.files.base.read.FileRead;
 import org.leechiwi.happyseven.files.image.Image;
 import org.leechiwi.happyseven.files.image.ap.factory.ApImageConvertTypeFactory;
 import org.leechiwi.happyseven.files.image.ap.factory.ImageSourceFactory;
@@ -35,14 +36,7 @@ public class ApImage extends ImageLicense implements Image {
     private com.aspose.imaging.Image createImage(ImageFormat sourceImageformat, Object in) {
         com.aspose.imaging.Image image = null;
         try {
-            InputStream inputStream = null;
-            if (in instanceof InputStream) {
-                inputStream = (InputStream) in;
-            } else if (in instanceof File) {
-                inputStream = new FileInputStream((File)in);
-            } else if (in instanceof String) {
-                inputStream = new FileInputStream(new File((String) in));
-            }
+            InputStream inputStream = new FileRead().loadFile(in);
             image = ImageSourceFactory.createImageSource(sourceImageformat, inputStream);
         } catch (Exception e) {
             throw new HappysevenException("create aspose image Document error", e);

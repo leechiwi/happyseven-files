@@ -3,6 +3,7 @@ package org.leechiwi.happyseven.files.cell.ap;
 import com.aspose.cells.Workbook;
 import lombok.extern.slf4j.Slf4j;
 import org.leechiwi.happyseven.files.base.exception.HappysevenException;
+import org.leechiwi.happyseven.files.base.read.FileRead;
 import org.leechiwi.happyseven.files.cell.Cell;
 import org.leechiwi.happyseven.files.cell.enums.CellConvertType;
 
@@ -20,14 +21,7 @@ public class ApCell extends CellLicense implements Cell {
     private Workbook createWorkbook(Object workbook) {
         Workbook wb=null;
         try {
-            InputStream inputStream=null;
-            if(workbook instanceof InputStream){
-                inputStream=(InputStream) workbook;
-            }else if(workbook instanceof File){
-                inputStream=new FileInputStream((File)workbook);
-            }else if(workbook instanceof String){
-                inputStream=new FileInputStream(new File((String)workbook));
-            }
+            InputStream inputStream = new FileRead().loadFile(workbook);
             wb=new Workbook(inputStream);
         } catch (Exception e) {
             log.error("create aspose word Document error", e);

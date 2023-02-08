@@ -2,6 +2,7 @@ package org.leechiwi.happyseven.files.doc.ap;
 
 import com.aspose.words.Document;
 import lombok.extern.slf4j.Slf4j;
+import org.leechiwi.happyseven.files.base.read.FileRead;
 import org.leechiwi.happyseven.files.doc.Doc;
 import org.leechiwi.happyseven.files.doc.ap.factory.ApWordConvertTypeFactory;
 import org.leechiwi.happyseven.files.doc.enums.WordConvertType;
@@ -23,14 +24,7 @@ public class ApDoc extends DocLicense implements Doc {
     private Document createDocument(Object document) {
         Document doc = null;
         try {
-            InputStream inputStream = null;
-            if (document instanceof InputStream) {
-                inputStream = (InputStream) document;
-            } else if (document instanceof File) {
-                inputStream = new FileInputStream((File) document);
-            } else if (document instanceof String) {
-                inputStream = new FileInputStream(new File((String) document));
-            }
+            InputStream inputStream = new FileRead().loadFile(document);
             doc = new Document(inputStream);
         } catch (Exception e) {
             log.error("create aspose word Document error", e);

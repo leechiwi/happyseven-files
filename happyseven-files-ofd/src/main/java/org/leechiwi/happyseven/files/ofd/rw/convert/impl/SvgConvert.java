@@ -1,6 +1,7 @@
 package org.leechiwi.happyseven.files.ofd.rw.convert.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.leechiwi.happyseven.files.base.util.Zip;
 import org.leechiwi.happyseven.files.ofd.rw.convert.AbstractRwOfdConvert;
 import org.ofdrw.converter.SVGMaker;
 import org.ofdrw.reader.OFDReader;
@@ -30,7 +31,7 @@ public class SvgConvert extends AbstractRwOfdConvert {
                 String svg = svgMaker.makePage(i);
                 streamList.add(svg.getBytes());
             }
-            this.zip(out,streamList,".svg");
+            Zip.zip(out,streamList,".svg");
         }catch(Exception e){
             log.error("OFDRW SvgConvert failed", e);
             return false;
