@@ -1,5 +1,7 @@
 package org.leechiwi.happyseven.files.barcode.enums;
 
+import java.util.EnumSet;
+
 public enum BarcodeType {
     NONE ((short)-1, "NONE"),
     CODABAR  ((short)0, "Codabar"),

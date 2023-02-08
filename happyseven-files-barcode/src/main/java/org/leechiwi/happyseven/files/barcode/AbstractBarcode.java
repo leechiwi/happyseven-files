@@ -9,29 +9,26 @@ import java.io.OutputStream;
 import java.util.List;
 
 public abstract class AbstractBarcode implements Barcode {
-    public abstract  boolean pre();
-    public List<String> getPreBarcodeText(Object image) {
-        if(pre()){
-           return this.getBarcodeText(image);
-        }
-        return null;
-    }
+    public abstract  boolean doPre();
 
-    public String getPreSingleBarcodeText(Object image,Barcode barcodeImpl) {
-        if(pre()){
-            return barcodeImpl.getSingleBarcodeText(image);
-        }
-        return StringUtils.EMPTY;
-    }
+    public abstract List<String> doBarcodeText(Object image);
+
+    public abstract String doSingleBarcodeText(Object image);
 
     @Override
     public List<String> getBarcodeText(Object image) {
+        if(doPre()){
+            return this.doBarcodeText(image);
+        }
         return null;
     }
 
     @Override
     public String getSingleBarcodeText(Object image) {
-        return null;
+        if(doPre()){
+            return this.doSingleBarcodeText(image);
+        }
+        return StringUtils.EMPTY;
     }
 
     @Override

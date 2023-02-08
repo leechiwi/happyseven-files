@@ -25,10 +25,18 @@ import java.util.*;
 public class ZXingBarcode implements Barcode {
     private BarcodeType barcodeType;
     private Writer writer;
+    private int width;
+    private int height;
 
-    public ZXingBarcode(BarcodeType barcodeType) {
+    public ZXingBarcode(BarcodeType barcodeType, int width, int height) {
         this.barcodeType = barcodeType;
         this.writer = new WriterFactory().createWriter(barcodeType);
+        this.width = width;
+        this.height = height;
+    }
+
+    public ZXingBarcode(BarcodeType barcodeType) {
+        this(barcodeType,195,40);
     }
 
     @Override
@@ -73,15 +81,17 @@ public class ZXingBarcode implements Barcode {
         BufferedImage result = null;
         try {
             BarcodeFormat barcodeFormat = new ZXingBarcodeTypeFactory().convertBarcode(this.barcodeType);
-            BitMatrix bitMatrix = writer.encode(text, barcodeFormat, 195, 40, null);
+            BitMatrix bitMatrix = writer.encode(text, barcodeFormat, this.width, this.height, null);
             result = MatrixToImageWriter.toBufferedImage(bitMatrix);
             if (Objects.nonNull(out)) {
                 MatrixToImageWriter.writeToStream(bitMatrix, imageFormat.getName(), out);
             }
         } catch (WriterException e) {
-            e.printStackTrace();
+            log.error("ZXing CreateBarcode error",e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("ZXing CreateBarcode error",e);
+        } catch (NullPointerException e){
+            log.error("ZXing CreateBarcode error(unsupport)",e);
         }
         return result;
     }
