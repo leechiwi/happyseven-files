@@ -1,5 +1,6 @@
 package org.leechiwi.happyseven.files.text;
 
+import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.text.enums.TextConvertType;
 
 import java.io.File;
@@ -9,11 +10,11 @@ import java.io.OutputStream;
 public abstract class AbstractText implements Text {
     public abstract boolean doPre(TextConvertType textConvertType);
 
-    public abstract boolean doConvert(Object in, OutputStream out, TextConvertType textConvertType);
+    public abstract boolean doConvert(Object in, OutputStream out, TextConvertType textConvertType, OptionResult optionResult);
     @Override
     public boolean convert(InputStream in, OutputStream out, TextConvertType textConvertType) {
         if(doPre(textConvertType)){
-            return doConvert(in, out, textConvertType);
+            return doConvert(in, out, textConvertType,null);
         }
         return false;
     }
@@ -21,7 +22,7 @@ public abstract class AbstractText implements Text {
     @Override
     public boolean convert(File file, OutputStream out, TextConvertType textConvertType) {
         if(doPre(textConvertType)){
-            return doConvert(file, out, textConvertType);
+            return doConvert(file, out, textConvertType,null);
         }
         return false;
     }
@@ -29,15 +30,15 @@ public abstract class AbstractText implements Text {
     @Override
     public boolean convert(String path, OutputStream out, TextConvertType textConvertType) {
         if(doPre(textConvertType)){
-            return doConvert(path, out, textConvertType);
+            return doConvert(path, out, textConvertType,null);
         }
         return false;
     }
 
     @Override
-    public boolean convertAll(OutputStream out, TextConvertType textConvertType) {
+    public boolean convertAll(OutputStream out, TextConvertType textConvertType, OptionResult optionResult) {
         if(doPre(textConvertType)){
-            return doConvert(null, out, textConvertType);
+            return doConvert(null, out, textConvertType,optionResult);
         }
         return false;
     }

@@ -1,26 +1,26 @@
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
-import org.leechiwi.happyseven.files.doc.ap.ApDoc;
+import org.leechiwi.happyseven.files.base.entity.OptionResult;
+import org.leechiwi.happyseven.files.base.enums.ResultOptions;
+import org.leechiwi.happyseven.files.doc.ap.ApDocProxy;
 import org.leechiwi.happyseven.files.doc.enums.WordConvertType;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 public class ApDocTest {
     @Test
     public void convert() {
-        //String path = "d:/test.doc";
-        //InputStream in = null;
         FileOutputStream out=null;
         try {
-            //in = new FileInputStream(new File(path));
-            out = new FileOutputStream(new File("d:/test.pdf"));
-            boolean convert = new ApDoc("d:/test.doc").convertAll(out, WordConvertType.PDF);
+            out = new FileOutputStream(new File("d:/test.zip"));
+            boolean convert = new ApDocProxy(300,"d:/test.doc", ResultOptions.ALL_IN_ZIP).convertAll(out, WordConvertType.JPEG,new OptionResult());
             System.out.println("result=" + convert);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }finally{
             IOUtils.closeQuietly(out);
-            //IOUtils.closeQuietly(in);
         }
 
 

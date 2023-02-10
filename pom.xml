@@ -20,6 +20,7 @@
         <module>happyseven-files-slide</module>
         <module>happyseven-files-web</module>
         <module>happyseven-files-base</module>
+        <module>happyseven-files-text</module>
     </modules>
     <dependencies>
         <dependency>

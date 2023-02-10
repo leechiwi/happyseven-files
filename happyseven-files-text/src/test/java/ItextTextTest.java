@@ -13,7 +13,7 @@ public class ItextTextTest {
         FileOutputStream out=null;
         try {
             out = new FileOutputStream(new File("d:/test.pdf"));
-            boolean convert = new ItextText("d:/test.txt").convertAll(out, TextConvertType.PDF);
+            boolean convert = new ItextText("d:/test.txt").convertAll(out, TextConvertType.PDF,null);
             System.out.println("result=" + convert);
         } catch (FileNotFoundException e) {
             e.printStackTrace();

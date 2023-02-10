@@ -1,5 +1,6 @@
 package org.leechiwi.happyseven.files.pdf;
 
+import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.pdf.enums.PdfConvertType;
 
 import java.io.File;
@@ -13,5 +14,5 @@ public interface Pdf {
 
     boolean convert(String path, OutputStream out,  PdfConvertType pdfConvertType);
 
-    boolean convertAll(OutputStream out,  PdfConvertType pdfConvertType);
+    boolean convertAll(OutputStream out,  PdfConvertType pdfConvertType, OptionResult optionResult);
 }

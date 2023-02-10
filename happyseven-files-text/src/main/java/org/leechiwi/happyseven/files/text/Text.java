@@ -1,5 +1,6 @@
 package org.leechiwi.happyseven.files.text;
 
+import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.text.enums.TextConvertType;
 
 import java.io.File;
@@ -13,5 +14,5 @@ public interface Text {
 
     boolean convert(String path, OutputStream out, TextConvertType textConvertType);
 
-    boolean convertAll(OutputStream out, TextConvertType textConvertType);
+    boolean convertAll(OutputStream out, TextConvertType textConvertType, OptionResult optionResult);
 }

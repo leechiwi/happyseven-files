@@ -1,13 +1,16 @@
 package org.leechiwi.happyseven.files.doc.ap;
 
 import com.aspose.words.Document;
+import com.aspose.words.DocumentBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.base.read.FileRead;
 import org.leechiwi.happyseven.files.doc.Doc;
 import org.leechiwi.happyseven.files.doc.ap.factory.ApWordConvertTypeFactory;
 import org.leechiwi.happyseven.files.doc.enums.WordConvertType;
 
 import java.io.*;
+import java.util.Objects;
 
 @Slf4j
 public class ApDoc extends DocLicense implements Doc {
@@ -24,6 +27,12 @@ public class ApDoc extends DocLicense implements Doc {
     private Document createDocument(Object document) {
         Document doc = null;
         try {
+            if(Objects.isNull(document)){
+                return new Document();
+            }
+            if(document instanceof Document){
+                return (Document)document;
+            }
             InputStream inputStream = new FileRead().loadFile(document);
             doc = new Document(inputStream);
         } catch (Exception e) {
@@ -68,7 +77,7 @@ public class ApDoc extends DocLicense implements Doc {
     }
 
     @Override
-    public boolean convertAll(OutputStream out, WordConvertType wordConvertType) {
+    public boolean convertAll(OutputStream out, WordConvertType wordConvertType, OptionResult optionResult) {
         try {
             this.document.save(out, new ApWordConvertTypeFactory().convertWordConvertType(wordConvertType));
         } catch (Exception e) {
@@ -76,5 +85,22 @@ public class ApDoc extends DocLicense implements Doc {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Document createTextDoc(String text) {
+        try {
+            this.document = new Document();
+            DocumentBuilder builder = new DocumentBuilder(this.document);
+            builder.write(text);
+        } catch (Exception e) {
+            log.error("aspose word create TextDoc error", e);
+            return null;
+        }
+        return this.document ;
+    }
+
+    public Document getDocument() {
+        return document;
     }
 }

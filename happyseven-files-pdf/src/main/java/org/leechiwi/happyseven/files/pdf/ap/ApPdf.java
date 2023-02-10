@@ -2,6 +2,7 @@ package org.leechiwi.happyseven.files.pdf.ap;
 
 import com.aspose.pdf.Document;
 import lombok.extern.slf4j.Slf4j;
+import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.base.read.FileRead;
 import org.leechiwi.happyseven.files.pdf.Pdf;
 import org.leechiwi.happyseven.files.pdf.ap.factory.ApPdfConvertTypeFactory;
@@ -76,7 +77,7 @@ public class ApPdf extends PdfLicense implements Pdf {
     }
 
     @Override
-    public boolean convertAll(OutputStream out, PdfConvertType pdfConvertType) {
+    public boolean convertAll(OutputStream out, PdfConvertType pdfConvertType, OptionResult optionResult) {
         try {
             document.save(out, new ApPdfConvertTypeFactory().convertPdfConvertType(pdfConvertType));
         } catch (Exception e) {

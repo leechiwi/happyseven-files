@@ -3,6 +3,8 @@ package org.leechiwi.happyseven.files.pdf.ap;
 import com.aspose.pdf.PageCollection;
 import com.aspose.pdf.devices.*;
 import lombok.extern.slf4j.Slf4j;
+import org.leechiwi.happyseven.files.base.entity.OptionResult;
+import org.leechiwi.happyseven.files.base.enums.ResultOptions;
 import org.leechiwi.happyseven.files.base.util.Zip;
 import org.leechiwi.happyseven.files.pdf.Pdf;
 import org.leechiwi.happyseven.files.pdf.enums.PdfConvertType;
@@ -18,20 +20,22 @@ import java.util.Objects;
 public class ApPdfProxy implements Pdf {
     private int dpi;
     private ApPdf apPdf;
+    private ResultOptions resultOptions;
 
-    public ApPdfProxy(int dpi, Object in) {
+    public ApPdfProxy(int dpi, Object in,ResultOptions resultOptions) {
         if (Objects.nonNull(in)) {
             this.apPdf = new ApPdf(in);
         } else {
             this.apPdf = new ApPdf();
         }
         this.dpi = dpi;
+        this.resultOptions=resultOptions;
     }
 
     @Override
     public boolean convert(InputStream in, OutputStream out, PdfConvertType pdfConvertType) {
         if(toImage(pdfConvertType)){
-            return convertToImg(pdfConvertType,out);
+            return false;
         }
         return this.apPdf.convert(in, out, pdfConvertType);
     }
@@ -39,7 +43,7 @@ public class ApPdfProxy implements Pdf {
     @Override
     public boolean convert(File file, OutputStream out, PdfConvertType pdfConvertType) {
         if(toImage(pdfConvertType)){
-            return convertToImg(pdfConvertType,out);
+            return false;
         }
         return this.apPdf.convert(file, out, pdfConvertType);
     }
@@ -47,17 +51,17 @@ public class ApPdfProxy implements Pdf {
     @Override
     public boolean convert(String path, OutputStream out, PdfConvertType pdfConvertType) {
         if(toImage(pdfConvertType)){
-            return convertToImg(pdfConvertType,out);
+            return false;
         }
         return this.apPdf.convert(path, out, pdfConvertType);
     }
 
     @Override
-    public boolean convertAll(OutputStream out, PdfConvertType pdfConvertType) {
+    public boolean convertAll(OutputStream out, PdfConvertType pdfConvertType, OptionResult optionResult) {
         if(toImage(pdfConvertType)){
-            return convertToImg(pdfConvertType,out);
+            return convertToImg(pdfConvertType,out,optionResult);
         }
-        return this.apPdf.convertAll(out, pdfConvertType);
+        return this.apPdf.convertAll(out, pdfConvertType,optionResult);
     }
 
     private boolean toImage(PdfConvertType pdfConvertType) {
@@ -85,7 +89,7 @@ public class ApPdfProxy implements Pdf {
         }
         return imageDevice;
     }
-    private boolean convertToImg(PdfConvertType pdfConvertType,OutputStream out) {
+    private boolean convertToImg(PdfConvertType pdfConvertType, OutputStream out, OptionResult optionResult) {
         try {
             List<byte[]> list = new ArrayList<>();
             ImageDevice imageDevice = getImageDevice(pdfConvertType);
@@ -95,7 +99,17 @@ public class ApPdfProxy implements Pdf {
                 imageDevice.process(pages.get_Item(i+1), os);
                 list.add(os.toByteArray());
             }
-            Zip.zip(out,list,pdfConvertType.getExt());
+
+            if (ResultOptions.ALL_IN_ZIP == this.resultOptions) {
+                Zip.zip(out,list,pdfConvertType.getExt());
+                if (out instanceof ByteArrayOutputStream) {
+                    ArrayList<byte[]> lst = new ArrayList<>();
+                    lst.add(((ByteArrayOutputStream) out).toByteArray());
+                    optionResult.setByteList(lst);
+                }
+            }else if(ResultOptions.MANY == this.resultOptions){
+                optionResult.setByteList(list);
+            }
         } catch (Exception e) {
             log.error("aspose pdf convert image file error",e);
             return false;

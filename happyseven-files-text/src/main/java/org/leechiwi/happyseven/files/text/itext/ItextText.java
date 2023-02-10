@@ -8,6 +8,7 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.base.read.FileRead;
 import org.leechiwi.happyseven.files.text.AbstractText;
 import org.leechiwi.happyseven.files.text.enums.TextConvertType;
@@ -30,7 +31,7 @@ public class ItextText extends AbstractText {
     }
 
     @Override
-    public boolean doConvert(Object in, OutputStream out, TextConvertType textConvertType) {
+    public boolean doConvert(Object in, OutputStream out, TextConvertType textConvertType, OptionResult optionResult) {
         boolean result=true;
         Document document =null;
         try {
