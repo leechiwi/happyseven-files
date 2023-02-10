@@ -1,6 +1,7 @@
 package org.leechiwi.happyseven.files.ofd.rw.convert;
 
 import lombok.extern.slf4j.Slf4j;;
+import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.base.exception.HappysevenException;
 import org.ofdrw.reader.OFDReader;
 
@@ -17,7 +18,7 @@ import java.util.zip.ZipOutputStream;
 public abstract class AbstractRwOfdConvert implements RwOfdConvert {
     public abstract void doPre();
 
-    public abstract boolean doConvert(Object in, OutputStream out);
+    public abstract boolean doConvert(Object in, OutputStream out, OptionResult optionResult);
 
     protected OFDReader createReader(Object in) {
         OFDReader ofdReader = null;
@@ -40,10 +41,10 @@ public abstract class AbstractRwOfdConvert implements RwOfdConvert {
     }
 
     @Override
-    public boolean convert(Object in, OutputStream out) {
+    public boolean convert(Object in, OutputStream out, OptionResult optionResult) {
         boolean result = false;
         this.doPre();
-        result = this.doConvert(in, out);
+        result = this.doConvert(in, out,optionResult);
         return result;
     }
     /*protected void zip(OutputStream out, List<InputStream> streamList,String ext) throws HappysevenException{

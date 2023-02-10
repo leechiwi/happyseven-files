@@ -1,5 +1,8 @@
 package org.leechiwi.happyseven.files.cell.enums;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 public enum CellConvertType {
     CSV(1, ".csv"),
     XLSX(6, ".xlsx"),
@@ -27,14 +30,22 @@ public enum CellConvertType {
     FODS(59,".fods"),
     SXC(60,".sxc"),
     PPTX(61,".pptx"),
-    DOCX(62,".docx");
-
+    DOCX(62,".docx"),
+    JPEG(104, ".jpg"),
+    PNG(101, ".png"),
+    GIF(105, ".gif"),
+    BMP(102, ".bmp");
     private final int code;
     private final String ext;
 
+    private static final Set<CellConvertType> imageTypeSet = EnumSet.of(JPEG, PNG, GIF, BMP);
     private CellConvertType(int code, String ext) {
         this.code = code;
         this.ext = ext;
+    }
+
+    public static Set<CellConvertType> getImageTypeSet() {
+        return imageTypeSet;
     }
 
     public int getCode() {

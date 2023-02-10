@@ -5,6 +5,7 @@ import com.aspose.pdf.devices.*;
 import lombok.extern.slf4j.Slf4j;
 import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.base.enums.ResultOptions;
+import org.leechiwi.happyseven.files.base.util.Result;
 import org.leechiwi.happyseven.files.base.util.Zip;
 import org.leechiwi.happyseven.files.pdf.Pdf;
 import org.leechiwi.happyseven.files.pdf.enums.PdfConvertType;
@@ -99,17 +100,7 @@ public class ApPdfProxy implements Pdf {
                 imageDevice.process(pages.get_Item(i+1), os);
                 list.add(os.toByteArray());
             }
-
-            if (ResultOptions.ALL_IN_ZIP == this.resultOptions) {
-                Zip.zip(out,list,pdfConvertType.getExt());
-                if (out instanceof ByteArrayOutputStream) {
-                    ArrayList<byte[]> lst = new ArrayList<>();
-                    lst.add(((ByteArrayOutputStream) out).toByteArray());
-                    optionResult.setByteList(lst);
-                }
-            }else if(ResultOptions.MANY == this.resultOptions){
-                optionResult.setByteList(list);
-            }
+            Result.convertToImageResult(resultOptions,pdfConvertType.getExt(),out,list,optionResult);
         } catch (Exception e) {
             log.error("aspose pdf convert image file error",e);
             return false;

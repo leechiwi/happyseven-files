@@ -1,5 +1,7 @@
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
+import org.leechiwi.happyseven.files.base.entity.OptionResult;
+import org.leechiwi.happyseven.files.base.enums.ResultOptions;
 import org.leechiwi.happyseven.files.ofd.enums.OfdConvertType;
 import org.leechiwi.happyseven.files.ofd.rw.RwOfd;
 
@@ -12,8 +14,8 @@ public class RwOfdTest {
     public void convert() {
         FileOutputStream out = null;
         try {
-            out = new FileOutputStream(new File("d:/test.pdf"));
-            boolean convert = new RwOfd().convertAll("d:/test.ofd", out, OfdConvertType.PDF);
+            out = new FileOutputStream(new File("d:/test.zip"));
+            boolean convert = new RwOfd(ResultOptions.ALL_IN_ZIP).convertAll("d:/test.ofd", out, OfdConvertType.PNG,new OptionResult());
             System.out.println("result=" + convert);
         } catch (FileNotFoundException e) {
             e.printStackTrace();

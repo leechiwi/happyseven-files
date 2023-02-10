@@ -2,6 +2,7 @@ package org.leechiwi.happyseven.files.ofd.rw.convert.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.ofd.rw.convert.AbstractRwOfdConvert;
 import org.ofdrw.converter.HtmlMaker;
 import org.ofdrw.reader.OFDReader;
@@ -25,7 +26,7 @@ public class HtmlConvert extends AbstractRwOfdConvert {
     }
 
     @Override
-    public boolean doConvert(Object in, OutputStream out) {
+    public boolean doConvert(Object in, OutputStream out, OptionResult optionResult) {
         boolean result = true;
         OFDReader reader = null;
         try {
