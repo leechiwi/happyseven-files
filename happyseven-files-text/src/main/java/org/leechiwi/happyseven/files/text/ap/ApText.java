@@ -1,11 +1,14 @@
 package org.leechiwi.happyseven.files.text.ap;
 
+import com.aspose.words.Document;
 import lombok.extern.slf4j.Slf4j;
 import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.base.enums.ResultOptions;
 import org.leechiwi.happyseven.files.base.read.FileRead;
+import org.leechiwi.happyseven.files.doc.Doc;
 import org.leechiwi.happyseven.files.doc.ap.ApDoc;
-import org.leechiwi.happyseven.files.doc.ap.ApDocProxy;
+import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocHtmlDecorator;
+import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocImageDecorator;
 import org.leechiwi.happyseven.files.doc.enums.WordConvertType;
 import org.leechiwi.happyseven.files.text.AbstractText;
 import org.leechiwi.happyseven.files.text.enums.TextConvertType;
@@ -14,14 +17,15 @@ import java.io.*;
 import java.util.Objects;
 @Slf4j
 public class ApText extends AbstractText {
-    private  ApDocProxy apDoc;
+    private Doc<Document> apDoc;
     private  Object in;
     private ResultOptions resultOptions;
 
     public ApText(Object in,ResultOptions resultOptions) {
         this.in = in;
         this.resultOptions=resultOptions;
-        apDoc=new ApDocProxy(300,null,this.resultOptions);
+        ApDocImageDecorator apDocImageDecorator = new ApDocImageDecorator(300, new ApDoc(), this.resultOptions);
+        apDoc = new ApDocHtmlDecorator(apDocImageDecorator);
     }
     public ApText(Object in) {
         this(in,ResultOptions.NONE);

@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public interface Doc {
+public interface Doc<T> {
     boolean convert(InputStream in, OutputStream out, WordConvertType wordConvertTypet);
 
     boolean convert(File file, OutputStream out, WordConvertType wordConvertType);
@@ -18,5 +18,7 @@ public interface Doc {
     boolean convertAll(OutputStream out, WordConvertType wordConvertType, OptionResult optionResult);
 
     Document createTextDoc(String text);
+
+    T getDoc();
 
 }

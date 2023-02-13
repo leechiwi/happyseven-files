@@ -2,21 +2,22 @@ package org.leechiwi.happyseven.files.base.entity;
 
 import java.util.List;
 
-public class OptionResult {
-    private List<byte[]> byteList;
+public class OptionResult<T> {
+    private List<T> list;
 
     public OptionResult() {
 
     }
-    public OptionResult(List<byte[]> byteList) {
-        this.byteList = byteList;
+
+    public OptionResult(List<T> list) {
+        this.list = list;
     }
 
-    public List<byte[]> getByteList() {
-        return byteList;
+    public List<T> getList() {
+        return list;
     }
 
-    public void setByteList(List<byte[]> byteList) {
-        this.byteList = byteList;
+    public void setList(List<T> list) {
+        this.list = list;
     }
 }

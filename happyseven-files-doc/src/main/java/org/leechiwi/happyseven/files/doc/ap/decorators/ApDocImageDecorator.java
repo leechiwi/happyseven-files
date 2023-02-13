@@ -1,4 +1,4 @@
-package org.leechiwi.happyseven.files.doc.ap;
+package org.leechiwi.happyseven.files.doc.ap.decorators;
 
 import com.aspose.words.Document;
 import com.aspose.words.ImageSaveOptions;
@@ -8,6 +8,7 @@ import org.leechiwi.happyseven.files.base.enums.ResultOptions;
 import org.leechiwi.happyseven.files.base.util.Result;
 import org.leechiwi.happyseven.files.base.util.Zip;
 import org.leechiwi.happyseven.files.doc.Doc;
+import org.leechiwi.happyseven.files.doc.ap.ApDoc;
 import org.leechiwi.happyseven.files.doc.ap.factory.ApWordConvertTypeFactory;
 import org.leechiwi.happyseven.files.doc.enums.WordConvertType;
 
@@ -20,17 +21,18 @@ import java.util.List;
 import java.util.Objects;
 
 @Slf4j
-public class ApDocProxy implements Doc {
+public class ApDocImageDecorator implements Doc<Document> {
     private int dpi;
-    private ApDoc apDoc;
+    private Doc<Document> apDoc;
     private ResultOptions resultOptions;
 
-    public ApDocProxy(int dpi, Object in,ResultOptions resultOptions) {
-        if (Objects.nonNull(in)) {
+    public ApDocImageDecorator(int dpi, Doc<Document> apDoc, ResultOptions resultOptions) {
+        /*if (Objects.nonNull(in)) {
             this.apDoc = new ApDoc(in);
         } else {
             this.apDoc = new ApDoc();
-        }
+        }*/
+        this.apDoc=apDoc;
         this.resultOptions=resultOptions;
         this.dpi = dpi;
     }
@@ -73,6 +75,11 @@ public class ApDocProxy implements Doc {
         return this.apDoc.createTextDoc(text);
     }
 
+    @Override
+    public Document getDoc() {
+        return this.apDoc.getDoc();
+    }
+
     private boolean toImage(WordConvertType wordConvertType) {
         return WordConvertType.getImageTypeSet().contains(wordConvertType);
     }
@@ -82,7 +89,7 @@ public class ApDocProxy implements Doc {
             List<byte[]> list = new ArrayList<>();
             ImageSaveOptions imageSaveOptions = new ImageSaveOptions(new ApWordConvertTypeFactory().convertWordConvertType(wordConvertType));
             imageSaveOptions.setResolution(this.dpi);
-            Document doc = this.apDoc.getDocument();
+            Document doc = this.apDoc.getDoc();
             for (int i = 0, size = doc.getPageCount(); i < size; i++) {
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 imageSaveOptions.setPageIndex(i);

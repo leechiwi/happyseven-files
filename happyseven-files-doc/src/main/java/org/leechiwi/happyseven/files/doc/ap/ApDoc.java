@@ -13,7 +13,7 @@ import java.io.*;
 import java.util.Objects;
 
 @Slf4j
-public class ApDoc extends DocLicense implements Doc {
+public class ApDoc extends DocLicense implements Doc<Document> {
     private Document document;
 
     public ApDoc() {
@@ -100,7 +100,8 @@ public class ApDoc extends DocLicense implements Doc {
         return this.document ;
     }
 
-    public Document getDocument() {
-        return document;
+    @Override
+    public Document getDoc() {
+        return this.document;
     }
 }

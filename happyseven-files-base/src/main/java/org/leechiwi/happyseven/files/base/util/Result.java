@@ -15,10 +15,10 @@ public class Result {
             if (out instanceof ByteArrayOutputStream) {
                 ArrayList<byte[]> lst = new ArrayList<>();
                 lst.add(((ByteArrayOutputStream) out).toByteArray());
-                optionResult.setByteList(lst);
+                optionResult.setList(lst);
             }
         }else if(ResultOptions.MANY == resultOptions){
-            optionResult.setByteList(list);
+            optionResult.setList(list);
         }
     }
 }
