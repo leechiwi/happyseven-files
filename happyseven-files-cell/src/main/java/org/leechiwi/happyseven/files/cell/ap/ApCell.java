@@ -2,6 +2,7 @@ package org.leechiwi.happyseven.files.cell.ap;
 
 import com.aspose.cells.Workbook;
 import lombok.extern.slf4j.Slf4j;
+import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.base.exception.HappysevenException;
 import org.leechiwi.happyseven.files.base.read.FileRead;
 import org.leechiwi.happyseven.files.cell.Cell;
@@ -10,7 +11,7 @@ import org.leechiwi.happyseven.files.cell.enums.CellConvertType;
 import java.io.*;
 
 @Slf4j
-public class ApCell extends CellLicense implements Cell {
+public class ApCell extends CellLicense implements Cell<Workbook> {
     private Workbook workbook;
     public ApCell(){
 
@@ -64,7 +65,7 @@ public class ApCell extends CellLicense implements Cell {
     }
 
     @Override
-    public boolean convertAll(OutputStream out, CellConvertType cellConvertType) {
+    public boolean convertAll(OutputStream out, CellConvertType cellConvertType, OptionResult optionResult) {
         try {
             this.workbook.save(out,cellConvertType.getCode());
         } catch (Exception e) {
@@ -72,5 +73,10 @@ public class ApCell extends CellLicense implements Cell {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Workbook getWorkbook() {
+        return this.workbook;
     }
 }

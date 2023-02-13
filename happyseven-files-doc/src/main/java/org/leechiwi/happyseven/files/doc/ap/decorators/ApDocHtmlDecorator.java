@@ -4,6 +4,7 @@ import com.aspose.words.Document;
 import com.aspose.words.HtmlFixedSaveOptions;
 import com.aspose.words.HtmlSaveOptions;
 import com.aspose.words.SaveOptions;
+import lombok.extern.slf4j.Slf4j;
 import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.doc.Doc;
 import org.leechiwi.happyseven.files.doc.enums.WordConvertType;
@@ -12,7 +13,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Objects;
-
+@Slf4j
 public class ApDocHtmlDecorator implements Doc<Document> {
     private Doc<Document> apDoc;
     private boolean embeddedHtml;
@@ -78,7 +79,7 @@ public class ApDocHtmlDecorator implements Doc<Document> {
             }
             this.apDoc.getDoc().save(out,saveOptions);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("aspose word convert to html error",e);
             return false;
         }
         return true;
