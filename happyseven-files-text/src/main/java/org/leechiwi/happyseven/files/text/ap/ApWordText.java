@@ -16,18 +16,18 @@ import org.leechiwi.happyseven.files.text.enums.TextConvertType;
 import java.io.*;
 import java.util.Objects;
 @Slf4j
-public class ApText extends AbstractText {
+public class ApWordText extends AbstractText {
     private Doc<Document> apDoc;
     private  Object in;
     private ResultOptions resultOptions;
 
-    public ApText(Object in,ResultOptions resultOptions) {
+    public ApWordText(Object in, ResultOptions resultOptions) {
         this.in = in;
         this.resultOptions=resultOptions;
         ApDocImageDecorator apDocImageDecorator = new ApDocImageDecorator(300, new ApDoc(), this.resultOptions);
         apDoc = new ApDocHtmlDecorator(apDocImageDecorator);
     }
-    public ApText(Object in) {
+    public ApWordText(Object in) {
         this(in,ResultOptions.NONE);
     }
     @Override

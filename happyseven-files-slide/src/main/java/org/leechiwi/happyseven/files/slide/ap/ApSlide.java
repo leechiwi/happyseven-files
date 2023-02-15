@@ -2,6 +2,7 @@ package org.leechiwi.happyseven.files.slide.ap;
 
 import com.aspose.slides.Presentation;
 import lombok.extern.slf4j.Slf4j;
+import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.base.read.FileRead;
 import org.leechiwi.happyseven.files.slide.Slide;
 import org.leechiwi.happyseven.files.slide.enums.SlideConvertType;
@@ -63,7 +64,7 @@ public class ApSlide extends SlideLicense implements Slide {
     }
 
     @Override
-    public boolean convertAll(OutputStream out, SlideConvertType slideConvertType) {
+    public boolean convertAll(OutputStream out, SlideConvertType slideConvertType, OptionResult optionResult) {
         try {
             this.slide.save(out,slideConvertType.getCode());
         } catch (Exception e) {

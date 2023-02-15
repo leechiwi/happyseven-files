@@ -7,12 +7,11 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public interface Text {
+public interface Text extends org.leechiwi.happyseven.files.base.File<TextConvertType> {
     boolean convert(InputStream in, OutputStream out, TextConvertType textConvertType);
 
     boolean convert(File file, OutputStream out, TextConvertType textConvertType);
 
     boolean convert(String path, OutputStream out, TextConvertType textConvertType);
 
-    boolean convertAll(OutputStream out, TextConvertType textConvertType, OptionResult optionResult);
 }

@@ -15,7 +15,7 @@ public class RwOfdTest {
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(new File("d:/test.zip"));
-            boolean convert = new RwOfd(ResultOptions.ALL_IN_ZIP).convertAll("d:/test.ofd", out, OfdConvertType.PNG,new OptionResult());
+            boolean convert = new RwOfd("d:/test.ofd",ResultOptions.ALL_IN_ZIP).convertAll( out, OfdConvertType.PNG,new OptionResult());
             System.out.println("result=" + convert);
         } catch (FileNotFoundException e) {
             e.printStackTrace();

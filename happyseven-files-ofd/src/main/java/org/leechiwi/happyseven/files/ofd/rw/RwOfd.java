@@ -14,16 +14,20 @@ import java.io.OutputStream;
 public class RwOfd implements Ofd {
     private ResultOptions resultOptions;
 
-    public RwOfd(ResultOptions resultOptions) {
+    private Object in;
+
+    public RwOfd(Object in,ResultOptions resultOptions) {
+        this.in=in;
         this.resultOptions = resultOptions;
     }
 
-    public RwOfd() {
-        this(ResultOptions.NONE);
+    public RwOfd(Object in) {
+        this(in,ResultOptions.NONE);
     }
+
     @Override
-    public boolean convertAll(Object in, OutputStream out, OfdConvertType ofdConvertType, OptionResult optionResult) {
+    public boolean convertAll(OutputStream out, OfdConvertType ofdConvertType, OptionResult optionResult) {
         RwOfdConvert rwOfdConvert = new RwOfdConvertTypeFactory(this.resultOptions).convertOfdConvertType(ofdConvertType);
-        return rwOfdConvert.convert(in,out,optionResult);
+        return rwOfdConvert.convert(this.in,out,optionResult);
     }
 }

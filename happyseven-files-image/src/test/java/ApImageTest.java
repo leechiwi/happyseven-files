@@ -1,5 +1,6 @@
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
+import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.base.enums.ImageFormat;
 import org.leechiwi.happyseven.files.image.ap.ApImage;
 import org.leechiwi.happyseven.files.image.enums.ImageConvertType;
@@ -15,7 +16,7 @@ public class ApImageTest {
         try {
             //in = new FileInputStream(new File(path));
             out = new FileOutputStream(new File("d:/test.pdf"));
-            boolean convert = new ApImage(ImageFormat.JPEG,"d:/微信图片_20221031143341.jpg",100,50).convertAll(out, ImageConvertType.PDF);
+            boolean convert = new ApImage(ImageFormat.JPEG,"d:/微信图片_20221031143341.jpg",100,50).convertAll(out, ImageConvertType.PDF,new OptionResult());
             System.out.println("result=" + convert);
         } catch (FileNotFoundException e) {
             e.printStackTrace();

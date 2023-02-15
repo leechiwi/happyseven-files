@@ -1,6 +1,7 @@
 package org.leechiwi.happyseven.files.image.ap;
 
 import lombok.extern.slf4j.Slf4j;
+import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.base.enums.ImageFormat;
 import org.leechiwi.happyseven.files.base.exception.HappysevenException;
 import org.leechiwi.happyseven.files.base.read.FileRead;
@@ -81,7 +82,7 @@ public class ApImage extends ImageLicense implements Image {
     }
 
     @Override
-    public boolean convertAll(OutputStream out, ImageConvertType imageConvertType) {
+    public boolean convertAll(OutputStream out, ImageConvertType imageConvertType, OptionResult optionResult) {
         try {
             this.image.save(out,new ApImageConvertTypeFactory(this.width,this.height).convertImageConvertType(imageConvertType));
         } catch (Exception e) {

@@ -1,0 +1,29 @@
+package org.leechiwi.happyseven.files.all.convert.handlers;
+
+import lombok.extern.slf4j.Slf4j;
+import org.leechiwi.happyseven.files.all.convert.ConvertChainHandler;
+import org.leechiwi.happyseven.files.base.entity.OptionResult;
+import org.leechiwi.happyseven.files.base.enums.ResultOptions;
+import org.leechiwi.happyseven.files.pdf.ap.ApPdfProxy;
+import org.leechiwi.happyseven.files.pdf.enums.PdfConvertType;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.util.Objects;
+
+@Slf4j
+public class PdfToAnyHandler extends ConvertChainHandler<PdfConvertType> {
+
+    @Override
+    public boolean doHandler(Object in, OutputStream out, PdfConvertType fileConvertType, ResultOptions resultOptions, OptionResult optionResult) {
+        boolean convert = new ApPdfProxy(300, in, resultOptions).convertAll(out, fileConvertType, optionResult);
+        return convert;
+    }
+
+    @Override
+    public Object doHandlerPost(OutputStream outputStream) {
+        ByteArrayOutputStream byteArrayOutputStream = (ByteArrayOutputStream) outputStream;
+        return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+    }
+}

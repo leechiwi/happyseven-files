@@ -10,6 +10,62 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>happyseven-files-all</artifactId>
-
+    <dependencies>
+        <dependency>
+            <groupId>org.leechiwi.happyseven</groupId>
+            <artifactId>happyseven-files-base</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.leechiwi.happyseven</groupId>
+            <artifactId>happyseven-files-barcode</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.leechiwi.happyseven</groupId>
+            <artifactId>happyseven-files-cell</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.leechiwi.happyseven</groupId>
+            <artifactId>happyseven-files-doc</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.leechiwi.happyseven</groupId>
+            <artifactId>happyseven-files-html</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.leechiwi.happyseven</groupId>
+            <artifactId>happyseven-files-image</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.leechiwi.happyseven</groupId>
+            <artifactId>happyseven-files-ofd</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.leechiwi.happyseven</groupId>
+            <artifactId>happyseven-files-pdf</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.leechiwi.happyseven</groupId>
+            <artifactId>happyseven-files-qrcode</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.leechiwi.happyseven</groupId>
+            <artifactId>happyseven-files-slide</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.leechiwi.happyseven</groupId>
+            <artifactId>happyseven-files-text</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>

@@ -8,14 +8,12 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public interface Doc<T> {
+public interface Doc<T>  extends org.leechiwi.happyseven.files.base.File<WordConvertType> {
     boolean convert(InputStream in, OutputStream out, WordConvertType wordConvertTypet);
 
     boolean convert(File file, OutputStream out, WordConvertType wordConvertType);
 
     boolean convert(String path, OutputStream out, WordConvertType wordConvertType);
-
-    boolean convertAll(OutputStream out, WordConvertType wordConvertType, OptionResult optionResult);
 
     Document createTextDoc(String text);
 

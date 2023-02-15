@@ -1,5 +1,6 @@
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
+import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.slide.ap.ApSlide;
 import org.leechiwi.happyseven.files.slide.enums.SlideConvertType;
 
@@ -16,7 +17,7 @@ public class ApSlideTest {
         try {
             //in = new FileInputStream(new File(path));
             out = new FileOutputStream(new File("d:/test.pdf"));
-            boolean convert = new ApSlide("d:/test.pptx").convertAll(out, SlideConvertType.Pdf);
+            boolean convert = new ApSlide("d:/test.pptx").convertAll(out, SlideConvertType.Pdf,new OptionResult());
             System.out.println("result=" + convert);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
