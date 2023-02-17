@@ -10,6 +10,39 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>happyseven-files-web</artifactId>
-
-
+    <dependencies>
+        <dependency>
+            <groupId>org.leechiwi.happyseven</groupId>
+            <artifactId>happyseven-files-all</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <!-- 解决 slf4j依赖冲突问题-->
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-slf4j-impl</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+    </dependencies>
 </project>

@@ -6,4 +6,10 @@ import java.io.OutputStream;
 
 public interface File<T> {
     boolean convertAll(OutputStream out, T fileConvertType, OptionResult optionResult);
+
+    default boolean convertAll(String out, T fileConvertType, OptionResult optionResult){
+        return false;
+    }
+
+
 }
