@@ -29,6 +29,7 @@
         <module>happyseven-files-base</module>
         <module>happyseven-files-text</module>
         <module>happyseven-files-html</module>
+        <module>happyseven-files-webclient</module>
     </modules>
     <dependencies>
         <dependency>

@@ -5,11 +5,15 @@ import org.leechiwi.happyseven.files.base.enums.ResultOptions;
 import org.leechiwi.happyseven.files.doc.ap.ApDoc;
 import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocHtmlDecorator;
 import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocImageDecorator;
+import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocImagesDecorator;
 import org.leechiwi.happyseven.files.doc.enums.WordConvertType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ApDocTest {
     @Test
@@ -17,7 +21,7 @@ public class ApDocTest {
         FileOutputStream out=null;
         try {
             out = new FileOutputStream(new File("d:/test.pdf"));
-            ApDocImageDecorator apDocImageDecorator = new ApDocImageDecorator(300, new ApDoc("d:/test.doc"), ResultOptions.ALL_IN_ZIP);
+            ApDocImageDecorator apDocImageDecorator = new ApDocImageDecorator(300, new ApDoc("d:/test6789.doc"), ResultOptions.ALL_IN_ZIP);
             boolean convert = new ApDocHtmlDecorator(apDocImageDecorator).convertAll(out, WordConvertType.PDF,new OptionResult());
             System.out.println("result=" + convert);
         } catch (FileNotFoundException e) {
@@ -25,7 +29,20 @@ public class ApDocTest {
         }finally{
             IOUtils.closeQuietly(out);
         }
-
-
+    }
+    @Test
+    public void ImagesConvert() {
+        FileOutputStream out=null;
+        try {
+            out = new FileOutputStream(new File("d:/test.pdf"));
+            List imageList= Stream.of("d:/微信图片_20221031143341.jpg","d:/微信图片_20221031153556.jpg").collect(Collectors.toList());
+            ApDocImagesDecorator apDocImagesDecorator=new ApDocImagesDecorator(imageList,new ApDoc(null));
+            boolean convert =apDocImagesDecorator.convertAll(out,WordConvertType.PDF,new OptionResult());
+            System.out.println("result=" + convert);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }finally{
+            IOUtils.closeQuietly(out);
+        }
     }
 }
