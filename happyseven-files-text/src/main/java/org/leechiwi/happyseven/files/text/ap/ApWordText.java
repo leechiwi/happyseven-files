@@ -9,6 +9,7 @@ import org.leechiwi.happyseven.files.doc.Doc;
 import org.leechiwi.happyseven.files.doc.ap.ApDoc;
 import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocHtmlDecorator;
 import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocImageDecorator;
+import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocTextDecorator;
 import org.leechiwi.happyseven.files.doc.enums.WordConvertType;
 import org.leechiwi.happyseven.files.text.AbstractText;
 import org.leechiwi.happyseven.files.text.enums.TextConvertType;
@@ -25,7 +26,8 @@ public class ApWordText extends AbstractText {
         this.in = in;
         this.resultOptions=resultOptions;
         ApDocImageDecorator apDocImageDecorator = new ApDocImageDecorator(300, new ApDoc(), this.resultOptions);
-        apDoc = new ApDocHtmlDecorator(apDocImageDecorator);
+        ApDocHtmlDecorator apDocHtmlDecorator = new ApDocHtmlDecorator(apDocImageDecorator);
+        apDoc =new ApDocTextDecorator(apDocHtmlDecorator,in);
     }
     public ApWordText(Object in) {
         this(in,ResultOptions.NONE);
@@ -37,26 +39,10 @@ public class ApWordText extends AbstractText {
 
     @Override
     public boolean doConvert(Object in, OutputStream out, TextConvertType textConvertType, OptionResult optionResult) {
-        boolean result=true;
-        try {
             if(Objects.isNull(in)){
                 in=this.in;
             }
-            InputStream inputStream=new FileRead().loadFile(in);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder stringBuilder = new StringBuilder();
-            String lineStr = "";
-            while ((lineStr = bufferedReader.readLine()) != null) {
-                stringBuilder.append(lineStr).append(System.getProperty("line.separator"));
-            }
             WordConvertType wordConvertType = WordConvertType.valueOf(textConvertType.toString());
-            //this.apDoc=new ApDocProxy(300,null,this.resultOptions);
-            this.apDoc.createTextDoc(stringBuilder.toString());
-            this.apDoc.convertAll(out,wordConvertType,optionResult);
-        } catch (IOException e) {
-            log.error("aspose text convert error",e);
-            result=false;
-        }
-        return result;
+            return this.apDoc.convertAll(out,wordConvertType,optionResult);
     }
 }

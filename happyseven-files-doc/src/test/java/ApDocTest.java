@@ -6,6 +6,7 @@ import org.leechiwi.happyseven.files.doc.ap.ApDoc;
 import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocHtmlDecorator;
 import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocImageDecorator;
 import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocImagesDecorator;
+import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocTextDecorator;
 import org.leechiwi.happyseven.files.doc.enums.WordConvertType;
 
 import java.io.File;
@@ -38,6 +39,23 @@ public class ApDocTest {
             List imageList= Stream.of("d:/微信图片_20221031143341.jpg","d:/微信图片_20221031153556.jpg").collect(Collectors.toList());
             ApDocImagesDecorator apDocImagesDecorator=new ApDocImagesDecorator(imageList,new ApDoc(null));
             boolean convert =apDocImagesDecorator.convertAll(out,WordConvertType.PDF,new OptionResult());
+            System.out.println("result=" + convert);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }finally{
+            IOUtils.closeQuietly(out);
+        }
+    }
+    @Test
+    public void textConvert() {
+        FileOutputStream out=null;
+        try {
+            out = new FileOutputStream(new File("d:/test.zip"));
+            String in="d:/test.txt";
+            ApDocImageDecorator apDocImageDecorator = new ApDocImageDecorator(300, new ApDoc(), ResultOptions.ALL_IN_ZIP);
+            ApDocHtmlDecorator apDocHtmlDecorator = new ApDocHtmlDecorator(apDocImageDecorator);
+            ApDocTextDecorator apDocTextDecorator =new ApDocTextDecorator(apDocHtmlDecorator,in);
+            boolean convert =apDocTextDecorator.convertAll(out,WordConvertType.JPEG,new OptionResult());
             System.out.println("result=" + convert);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
