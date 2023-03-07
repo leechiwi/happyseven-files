@@ -19,18 +19,25 @@ public class ApImage extends ImageLicense implements Image {
     private com.aspose.imaging.Image image;
     private float width;
     private float height;
-
+    private int pages;//gif的第几帧
     public ApImage(ImageFormat sourceImageformat){
         this(sourceImageformat,null,0,0);
     }
-    public ApImage(ImageFormat sourceImageformat, Object in,float width,float height) {
+
+    public ApImage(ImageFormat sourceImageformat, Object in,float width,float height,int pages) {
         this.sourceImageformat = sourceImageformat;
         if (Objects.nonNull(in)) {
             this.image = createImage(sourceImageformat, in);
         }
         this.width=width;
         this.height=height;
+        this.pages=pages;
     }
+
+    public ApImage(ImageFormat sourceImageformat, Object in,float width,float height){
+        this(sourceImageformat,in,width,height,0);
+    }
+
     public ApImage(ImageFormat sourceImageformat, Object in){
         this(sourceImageformat,in,0,0);
     }
@@ -49,7 +56,7 @@ public class ApImage extends ImageLicense implements Image {
     public boolean convert(InputStream in, OutputStream out, ImageConvertType imageConvertType) {
         try {
             com.aspose.imaging.Image image = createImage(sourceImageformat, in);
-            image.save(out, new ApImageConvertTypeFactory(this.width,this.height).convertImageConvertType(imageConvertType));
+            image.save(out, new ApImageConvertTypeFactory(this.width,this.height,this.pages).convertImageConvertType(imageConvertType));
         } catch (HappysevenException e) {
             log.error("aspose image convert stream error");
             return false;
@@ -61,7 +68,7 @@ public class ApImage extends ImageLicense implements Image {
     public boolean convert(String in, OutputStream out, ImageConvertType imageConvertType) {
         try {
             com.aspose.imaging.Image image =createImage(sourceImageformat, in);
-            image.save(out, new ApImageConvertTypeFactory(this.width,this.height).convertImageConvertType(imageConvertType));
+            image.save(out, new ApImageConvertTypeFactory(this.width,this.height,this.pages).convertImageConvertType(imageConvertType));
         } catch (HappysevenException e) {
             log.error("aspose image convert path error");
             return false;
@@ -84,7 +91,7 @@ public class ApImage extends ImageLicense implements Image {
     @Override
     public boolean convertAll(OutputStream out, ImageConvertType imageConvertType, OptionResult optionResult) {
         try {
-            this.image.save(out,new ApImageConvertTypeFactory(this.width,this.height).convertImageConvertType(imageConvertType));
+            this.image.save(out,new ApImageConvertTypeFactory(this.width,this.height,this.pages).convertImageConvertType(imageConvertType));
         } catch (Exception e) {
             log.error("aspose image convert all error",e);
             return false;

@@ -10,10 +10,12 @@ import org.leechiwi.happyseven.files.image.enums.ImageConvertType;
 public class ApImageConvertTypeFactory implements ImageConvertTypeFactory<ImageOptionsBase> {
     private float width;
     private float height;
+    private int pages;
 
-    public ApImageConvertTypeFactory(float width, float height) {
+    public ApImageConvertTypeFactory(float width, float height, int pages) {
         this.width = width;
         this.height = height;
+        this.pages = pages;
     }
 
     public ApImageConvertTypeFactory() {
@@ -35,9 +37,15 @@ public class ApImageConvertTypeFactory implements ImageConvertTypeFactory<ImageO
             ImageOptionsBase = new TiffOptions(15);
         } else if (ImageConvertType.PDF == imageConvertType) {
             PdfOptions pdfOptions = new PdfOptions();
-            pdfOptions.setPdfDocumentInfo(new PdfDocumentInfo());
+            PdfDocumentInfo pdfDocumentInfo = new PdfDocumentInfo();
+            pdfDocumentInfo.setAuthor("");
+            pdfDocumentInfo.setKeywords("GIF to PDF");
+            pdfOptions.setPdfDocumentInfo(pdfDocumentInfo);
             if (this.width > 0 && this.height > 0) {
                 pdfOptions.setPageSize(new SizeF(this.width, this.height));
+            }
+            if (this.pages > 0) {
+                pdfOptions.setMultiPageOptions(new MultiPageOptions(this.pages));
             }
             return pdfOptions;
         }
