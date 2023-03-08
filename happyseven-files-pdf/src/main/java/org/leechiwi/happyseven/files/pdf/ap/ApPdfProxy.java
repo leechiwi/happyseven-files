@@ -1,5 +1,6 @@
 package org.leechiwi.happyseven.files.pdf.ap;
 
+import com.aspose.pdf.Document;
 import com.aspose.pdf.PageCollection;
 import com.aspose.pdf.devices.*;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 @Slf4j
-public class ApPdfProxy implements Pdf {
+public class ApPdfProxy implements Pdf<Document> {
     private int dpi;
-    private ApPdf apPdf;
+    private Pdf<Document> apPdf;
     private ResultOptions resultOptions;
 
     public ApPdfProxy(int dpi, Object in,ResultOptions resultOptions) {
@@ -94,7 +95,7 @@ public class ApPdfProxy implements Pdf {
         try {
             List<byte[]> list = new ArrayList<>();
             ImageDevice imageDevice = getImageDevice(pdfConvertType);
-            PageCollection pages = this.apPdf.getDocument().getPages();
+            PageCollection pages = this.apPdf.getDoc().getPages();
             for (int i = 0, size = pages.size(); i < size; i++) {
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 imageDevice.process(pages.get_Item(i+1), os);
@@ -106,5 +107,10 @@ public class ApPdfProxy implements Pdf {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Document getDoc() {
+        return this.apPdf.getDoc();
     }
 }

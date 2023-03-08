@@ -12,25 +12,22 @@ import java.io.*;
 import java.util.Objects;
 
 @Slf4j
-public class ApPdf extends PdfLicense implements Pdf {
+public class ApPdf extends PdfLicense implements Pdf<Document> {
     private Document document;
 
     public ApPdf(Object in) {
-        if(Objects.nonNull(in)) {
-            this.document = createDocument(in);
-        }
+        this.document = createDocument(in);
     }
 
     public ApPdf() {
 
     }
 
-    public Document getDocument() {
-        return document;
-    }
-
-    private Document createDocument(Object document){
-        Document doc=null;
+    private Document createDocument(Object document) {
+        Document doc = null;
+        if (Objects.isNull(document)) {
+            return new Document();
+        }
         try {
             InputStream inputStream = new FileRead().loadFile(document);
             doc = new Document(inputStream);
@@ -46,7 +43,7 @@ public class ApPdf extends PdfLicense implements Pdf {
         try {
             Document document = new Document(in);
             document.save(out, new ApPdfConvertTypeFactory().convertPdfConvertType(pdfConvertType));
-        }catch(Exception e){
+        } catch (Exception e) {
             log.error("aspose pdf convert stream error", e);
             return false;
         }
@@ -62,7 +59,7 @@ public class ApPdf extends PdfLicense implements Pdf {
             log.error("aspose pdf convert file error", e);
             return false;
         }
-        return convert(in,out,pdfConvertType);
+        return convert(in, out, pdfConvertType);
     }
 
     @Override
@@ -73,17 +70,26 @@ public class ApPdf extends PdfLicense implements Pdf {
         } catch (FileNotFoundException e) {
             log.error("aspose pdf convert filepath error", e);
         }
-        return convert(in,out,pdfConvertType);
+        return convert(in, out, pdfConvertType);
     }
 
     @Override
     public boolean convertAll(OutputStream out, PdfConvertType pdfConvertType, OptionResult optionResult) {
         try {
+            if(PdfConvertType.PDF==pdfConvertType){
+                document.save(out);
+                return true;
+            }
             document.save(out, new ApPdfConvertTypeFactory().convertPdfConvertType(pdfConvertType));
         } catch (Exception e) {
             log.error("aspose pdf convert all error", e);
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Document getDoc() {
+        return this.document;
     }
 }

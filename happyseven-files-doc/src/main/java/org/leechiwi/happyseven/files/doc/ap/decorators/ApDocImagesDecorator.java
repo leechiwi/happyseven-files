@@ -50,6 +50,7 @@ public class ApDocImagesDecorator implements Doc<Document> {
 
     @Override
     public boolean convertAll(OutputStream out, WordConvertType fileConvertType, OptionResult optionResult) {
+        boolean result=true;
         try {
             Document doc = getDoc();
             DocumentBuilder builder = new DocumentBuilder(doc);
@@ -81,11 +82,12 @@ public class ApDocImagesDecorator implements Doc<Document> {
                         ps.getPageHeight(),
                         WrapType.NONE);
             }
-            this.apDoc.convertAll(out,fileConvertType,optionResult);
+            result=this.apDoc.convertAll(out,fileConvertType,optionResult);
         } catch (Exception e) {
+            result=false;
             log.error("aspose word images convert to"+ fileConvertType.getExt()+" error",e);
         }
-        return true;
+        return result;
     }
     // 等比计算图片尺寸
     public static double[] CalculateImageSize(BufferedImage img, double containerHeight, double containerWidth) throws Exception {

@@ -15,7 +15,8 @@ public enum PdfConvertType {
     PNG(2, ".png"),
     GIF(3, ".gif"),
     BMP(4, ".bmp"),
-    SVG(7, ".svg");
+    SVG(7, ".svg"),
+    PDF(40, ".pdf");
     private int code;
     private String ext;
     private PdfConvertType(int code, String ext) {
