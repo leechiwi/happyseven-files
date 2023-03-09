@@ -20,18 +20,16 @@ public class ApImageTest {
     public void convert() {
         FileOutputStream out=null;
         try {
-            //in = new FileInputStream(new File(path));
             out = new FileOutputStream(new File("d:/test.pdf"));
             List<Object> images=new ArrayList<>();
-            images.add("d:/微信图片_20221031153556.jpg");
             images.add("d:/微信图片_20221031143341.jpg");
-            boolean convert = new ApImageProxy<PdfConvertType>(ImageFormat.JPEG,images,100,50).convertAll(out, ImageConvertType.PDF,new OptionResult());
+            images.add("d:/微信图片_20221031153556.jpg");
+            boolean convert = new ApImageProxy<ImageConvertType>(ImageFormat.JPEG,images, ImagesType.IMAGE).convertAll(out, ImageConvertType.PDF,new OptionResult());
             System.out.println("result=" + convert);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }finally{
             IOUtils.closeQuietly(out);
-            //IOUtils.closeQuietly(in);
         }
     }
 }

@@ -1,9 +1,12 @@
 package org.leechiwi.happyseven.files.image.ap.factory;
 
+import com.aspose.imaging.Image;
 import com.aspose.imaging.ImageOptionsBase;
+import com.aspose.imaging.Size;
 import com.aspose.imaging.SizeF;
 import com.aspose.imaging.fileformats.pdf.PdfDocumentInfo;
 import com.aspose.imaging.imageoptions.*;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.leechiwi.happyseven.files.image.ImageConvertTypeFactory;
 import org.leechiwi.happyseven.files.image.enums.ImageConvertType;
 
@@ -11,11 +14,13 @@ public class ApImageConvertTypeFactory implements ImageConvertTypeFactory<ImageO
     private float width;
     private float height;
     private int pages;
+    private Image image;
 
-    public ApImageConvertTypeFactory(float width, float height, int pages) {
+    public ApImageConvertTypeFactory(float width, float height, int pages,Image image) {
         this.width = width;
         this.height = height;
         this.pages = pages;
+        this.image=image;
     }
 
     public ApImageConvertTypeFactory() {
@@ -43,6 +48,22 @@ public class ApImageConvertTypeFactory implements ImageConvertTypeFactory<ImageO
             pdfOptions.setPdfDocumentInfo(pdfDocumentInfo);
             if (this.width > 0 && this.height > 0) {
                 pdfOptions.setPageSize(new SizeF(this.width, this.height));
+            }else{
+                float currentImageHeight = this.image.getHeight();
+                float currentImageWidth = this.image.getWidth();
+                float s1 = PDRectangle.A4.getWidth() / currentImageWidth;
+                float s2 = PDRectangle.A4.getHeight() / currentImageHeight;
+                if (s1<1 || s2<1) {
+                    float scale = 1f;
+                    if (s1 > s2){
+                        scale = s2;
+                    } else {
+                        scale = s1;
+                    }
+                    currentImageWidth=currentImageWidth*scale;
+                    currentImageHeight=currentImageHeight*scale;
+                }
+                pdfOptions.setPageSize(new SizeF(currentImageWidth, currentImageHeight));
             }
             if (this.pages > 0) {
                 pdfOptions.setMultiPageOptions(new MultiPageOptions(this.pages));
