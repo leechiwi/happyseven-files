@@ -1,4 +1,4 @@
-package org.leechiwi.happyseven.files.doc.ap.decorators;
+package org.leechiwi.happyseven.files.doc.ap.proxy;
 
 import com.aspose.words.Document;
 import com.aspose.words.HtmlFixedSaveOptions;
@@ -14,15 +14,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Objects;
 @Slf4j
-public class ApDocHtmlDecorator implements Doc<Document> {
+public class ApDocHtmlProxy implements Doc<Document> {
     private Doc<Document> apDoc;
     private boolean embeddedHtml;
-    public ApDocHtmlDecorator(Doc<Document> apDoc,boolean embeddedHtml) {
+    public ApDocHtmlProxy(Doc<Document> apDoc, boolean embeddedHtml) {
         this.apDoc = apDoc;
         this.embeddedHtml=embeddedHtml;
     }
 
-    public ApDocHtmlDecorator(Doc<Document> apDoc) {
+    public ApDocHtmlProxy(Doc<Document> apDoc) {
         this(apDoc,false);
     }
     @Override

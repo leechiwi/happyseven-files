@@ -3,7 +3,7 @@ import org.junit.Test;
 import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.base.enums.ResultOptions;
 import org.leechiwi.happyseven.files.pdf.ap.ApPdf;
-import org.leechiwi.happyseven.files.pdf.ap.ApPdfProxy;
+import org.leechiwi.happyseven.files.pdf.ap.proxy.ApPdfProxy;
 import org.leechiwi.happyseven.files.pdf.ap.decorators.ApPdfImagesDecorator;
 import org.leechiwi.happyseven.files.pdf.enums.PdfConvertType;
 

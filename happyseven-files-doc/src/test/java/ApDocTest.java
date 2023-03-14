@@ -3,8 +3,8 @@ import org.junit.Test;
 import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.base.enums.ResultOptions;
 import org.leechiwi.happyseven.files.doc.ap.ApDoc;
-import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocHtmlDecorator;
-import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocImageDecorator;
+import org.leechiwi.happyseven.files.doc.ap.proxy.ApDocHtmlProxy;
+import org.leechiwi.happyseven.files.doc.ap.proxy.ApDocImageProxy;
 import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocImagesDecorator;
 import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocTextDecorator;
 import org.leechiwi.happyseven.files.doc.enums.WordConvertType;
@@ -22,8 +22,8 @@ public class ApDocTest {
         FileOutputStream out=null;
         try {
             out = new FileOutputStream(new File("d:/test.pdf"));
-            ApDocImageDecorator apDocImageDecorator = new ApDocImageDecorator(300, new ApDoc("d:/test6789.doc"), ResultOptions.ALL_IN_ZIP);
-            boolean convert = new ApDocHtmlDecorator(apDocImageDecorator).convertAll(out, WordConvertType.PDF,new OptionResult());
+            ApDocImageProxy apDocImageProxy = new ApDocImageProxy(300, new ApDoc("d:/test6789.doc"), ResultOptions.ALL_IN_ZIP);
+            boolean convert = new ApDocHtmlProxy(apDocImageProxy).convertAll(out, WordConvertType.PDF,new OptionResult());
             System.out.println("result=" + convert);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -52,9 +52,9 @@ public class ApDocTest {
         try {
             out = new FileOutputStream(new File("d:/test.zip"));
             String in="d:/test.txt";
-            ApDocImageDecorator apDocImageDecorator = new ApDocImageDecorator(300, new ApDoc(), ResultOptions.ALL_IN_ZIP);
-            ApDocHtmlDecorator apDocHtmlDecorator = new ApDocHtmlDecorator(apDocImageDecorator);
-            ApDocTextDecorator apDocTextDecorator =new ApDocTextDecorator(apDocHtmlDecorator,in);
+            ApDocImageProxy apDocImageProxy = new ApDocImageProxy(300, new ApDoc(), ResultOptions.ALL_IN_ZIP);
+            ApDocHtmlProxy apDocHtmlProxy = new ApDocHtmlProxy(apDocImageProxy);
+            ApDocTextDecorator apDocTextDecorator =new ApDocTextDecorator(apDocHtmlProxy,in);
             boolean convert =apDocTextDecorator.convertAll(out,WordConvertType.JPEG,new OptionResult());
             System.out.println("result=" + convert);
         } catch (FileNotFoundException e) {

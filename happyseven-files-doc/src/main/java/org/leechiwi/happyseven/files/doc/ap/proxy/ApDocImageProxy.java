@@ -1,4 +1,4 @@
-package org.leechiwi.happyseven.files.doc.ap.decorators;
+package org.leechiwi.happyseven.files.doc.ap.proxy;
 
 import com.aspose.words.Document;
 import com.aspose.words.ImageSaveOptions;
@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.Objects;
 
 @Slf4j
-public class ApDocImageDecorator implements Doc<Document> {
+public class ApDocImageProxy implements Doc<Document> {
     private int dpi;
     private Doc<Document> apDoc;
     private ResultOptions resultOptions;
 
-    public ApDocImageDecorator(int dpi, Doc<Document> apDoc, ResultOptions resultOptions) {
+    public ApDocImageProxy(int dpi, Doc<Document> apDoc, ResultOptions resultOptions) {
         /*if (Objects.nonNull(in)) {
             this.apDoc = new ApDoc(in);
         } else {

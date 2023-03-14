@@ -4,11 +4,10 @@ import com.aspose.words.Document;
 import lombok.extern.slf4j.Slf4j;
 import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.base.enums.ResultOptions;
-import org.leechiwi.happyseven.files.base.read.FileRead;
 import org.leechiwi.happyseven.files.doc.Doc;
 import org.leechiwi.happyseven.files.doc.ap.ApDoc;
-import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocHtmlDecorator;
-import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocImageDecorator;
+import org.leechiwi.happyseven.files.doc.ap.proxy.ApDocHtmlProxy;
+import org.leechiwi.happyseven.files.doc.ap.proxy.ApDocImageProxy;
 import org.leechiwi.happyseven.files.doc.ap.decorators.ApDocTextDecorator;
 import org.leechiwi.happyseven.files.doc.enums.WordConvertType;
 import org.leechiwi.happyseven.files.text.AbstractText;
@@ -25,9 +24,9 @@ public class ApWordText extends AbstractText {
     public ApWordText(Object in, ResultOptions resultOptions) {
         this.in = in;
         this.resultOptions=resultOptions;
-        ApDocImageDecorator apDocImageDecorator = new ApDocImageDecorator(300, new ApDoc(), this.resultOptions);
-        ApDocHtmlDecorator apDocHtmlDecorator = new ApDocHtmlDecorator(apDocImageDecorator);
-        apDoc =new ApDocTextDecorator(apDocHtmlDecorator,in);
+        ApDocImageProxy apDocImageProxy = new ApDocImageProxy(300, new ApDoc(), this.resultOptions);
+        ApDocHtmlProxy apDocHtmlProxy = new ApDocHtmlProxy(apDocImageProxy);
+        apDoc =new ApDocTextDecorator(apDocHtmlProxy,in);
     }
     public ApWordText(Object in) {
         this(in,ResultOptions.NONE);

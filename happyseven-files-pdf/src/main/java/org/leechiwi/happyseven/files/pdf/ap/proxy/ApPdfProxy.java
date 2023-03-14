@@ -1,4 +1,4 @@
-package org.leechiwi.happyseven.files.pdf.ap;
+package org.leechiwi.happyseven.files.pdf.ap.proxy;
 
 import com.aspose.pdf.Document;
 import com.aspose.pdf.PageCollection;
@@ -9,6 +9,7 @@ import org.leechiwi.happyseven.files.base.enums.ResultOptions;
 import org.leechiwi.happyseven.files.base.util.Result;
 import org.leechiwi.happyseven.files.base.util.Zip;
 import org.leechiwi.happyseven.files.pdf.Pdf;
+import org.leechiwi.happyseven.files.pdf.ap.ApPdf;
 import org.leechiwi.happyseven.files.pdf.enums.PdfConvertType;
 
 import java.io.ByteArrayOutputStream;
