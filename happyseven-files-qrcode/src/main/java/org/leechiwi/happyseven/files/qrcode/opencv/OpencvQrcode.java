@@ -12,9 +12,15 @@ import org.opencv.wechat_qrcode.WeChatQRCode;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Slf4j
 public class OpencvQrcode implements Qrcode {
@@ -61,6 +67,38 @@ public class OpencvQrcode implements Qrcode {
         //微信二维码引擎解码，返回的valList中存放的是解码后的数据，points中Mat存放的是二维码4个角的坐标
         List<String> list = we.detectAndDecode(img, points);
         return list;
+    }
+
+    @Override
+    public List<String> getQrcodeTextAsync(ThreadPoolExecutor pool, List<Object> imageList, int thread) {
+        List<String> resultList = new ArrayList<>();
+        List<Future<List<String>>> futures = new ArrayList<>();
+        ExecutorService executorService=pool;
+        boolean defaultPool=false;
+        if (Objects.isNull(pool)) {
+            executorService= Executors.newCachedThreadPool();
+            defaultPool=true;
+        }
+        for (Object obj : imageList) {
+            final Object tmpObj=obj;
+            Future<List<String>> future = executorService.submit(() -> {
+                    return getQrcodeText(tmpObj);
+            });
+            futures.add(future);
+        }
+        for (Future<List<String>> future : futures) {
+            List<String> result=null;
+            try {
+                result= future.get();
+            }catch (Exception e){
+                resultList.add(StringUtils.EMPTY);
+            }
+            resultList.addAll(result);
+        }
+        if(defaultPool) {
+            executorService.shutdown();
+        }
+        return resultList;
     }
 
     @Override

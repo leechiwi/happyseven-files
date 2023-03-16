@@ -21,8 +21,8 @@ public class SlideToPdfHandler extends ConvertChainHandler<PdfConvertType> {
     }
 
     @Override
-    public Object doHandlerPost(OutputStream outputStream) {
-        ByteArrayOutputStream byteArrayOutputStream = (ByteArrayOutputStream) outputStream;
+    public Object doHandlerPost(Object object) {
+        ByteArrayOutputStream byteArrayOutputStream = (ByteArrayOutputStream) object;
         return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
     }
 }

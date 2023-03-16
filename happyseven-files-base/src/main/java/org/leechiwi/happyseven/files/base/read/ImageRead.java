@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +18,8 @@ public class ImageRead {
             } else {
                 if (file instanceof String) {
                     file = new File((String) file);
+                }else if(file instanceof byte[]){
+                    file=new ByteArrayInputStream((byte[])file);
                 }
                 if (file instanceof InputStream) {
                     image = ImageIO.read((InputStream) file);

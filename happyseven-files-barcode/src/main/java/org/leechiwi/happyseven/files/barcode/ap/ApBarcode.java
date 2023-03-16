@@ -21,9 +21,12 @@ import org.leechiwi.happyseven.files.base.read.ImageRead;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
+
 @Slf4j
 public class ApBarcode extends BarcodeLicense implements Barcode {
     private BarcodeType barcodeType;
@@ -61,6 +64,77 @@ public class ApBarcode extends BarcodeLicense implements Barcode {
         result = reader.readBarCodes();
         return result;
     }
+
+    @Override
+    public List<String> getBarcodeTextAsync(ThreadPoolExecutor pool, List<Object> imageList, int thread) {
+        List<String> resultList = new ArrayList<>();
+        List<Future<List<String>>> futures = new ArrayList<>();
+        Map<String, Object> groupResult = group(imageList.size(), thread);
+        int[] group = (int[]) groupResult.get("group");
+        int trueThread = (int) groupResult.get("realThread");
+        ExecutorService executorService=pool;
+        boolean defaultPool=false;
+        if (Objects.isNull(pool)) {
+            executorService= Executors.newFixedThreadPool(trueThread);
+            defaultPool=true;
+        }
+        int index=0;
+        for (int i=0;i<trueThread;i++) {
+            final List<Object> lst=imageList.subList(index,index+group[i]);
+            index+=group[i];
+            Future<List<String>> future = executorService.submit(() -> {
+                List<String> list = new ArrayList<>();
+                for (Object o : lst) {
+                    List<String> codeTexts = this.getBarcodeText(o);
+                    list.addAll(codeTexts);
+                }
+                return list;
+            });
+            futures.add(future);
+        }
+        for (Future<List<String>> future : futures) {
+            List<String> result=null;
+            try {
+                result= future.get();
+            }catch (Exception e){
+                resultList.add(StringUtils.EMPTY);
+                log.debug("异常", e);// sonar
+                Thread.currentThread().interrupt();
+            }
+            resultList.addAll(result);
+        }
+        if(defaultPool) {
+            executorService.shutdown();
+        }
+        return resultList;
+    }
+
+    private  Map<String,Object> group(int size, int num){
+        Map<String,Object> resultMap=new HashMap<>();
+        int realThread=0;
+        int[] result = new int[num];
+        int per=size/num;
+        int modIndex=0;
+        int mod=size%num;
+        for (int i = 0; i < num; i++) {
+            if(size>0){
+                realThread++;
+                if (modIndex < mod) {
+                    modIndex++;
+                    result[i]=per + 1;
+                } else {
+                    result[i]=per;
+                }
+                size-=result[i];
+            }else{
+                break;
+            }
+        }
+        resultMap.put("group",result);
+        resultMap.put("realThread",realThread);
+        return resultMap;
+    }
+
     public BufferedImage CreateBarcode(String text, OutputStream out, BarcodeClassifications barcodeClassifications, ImageFormat imageFormat){
         BufferedImage bufferedImage=null;
         SingleDecodeType singleDecodeType = new ApBarcodeTypeFactory().convertBarcode(this.barcodeType);

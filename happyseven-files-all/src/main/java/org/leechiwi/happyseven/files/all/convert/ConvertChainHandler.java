@@ -9,7 +9,7 @@ import java.util.Objects;
 @Slf4j
 public abstract class ConvertChainHandler<E> {
     protected ConvertChainHandler<E> next;
-    protected OutputStream nextIn;
+    protected Object nextIn;
 
     public void next(ConvertChainHandler<E> next) {
         this.next = next;
@@ -17,7 +17,7 @@ public abstract class ConvertChainHandler<E> {
 
     public  abstract  boolean doHandler(Object in, OutputStream out,E fileConvertType, ResultOptions resultOptions,OptionResult optionResult);
 
-    public abstract Object doHandlerPost(OutputStream outputStream);
+    public abstract Object doHandlerPost(Object object);
 
     public boolean start(Object in, OutputStream out,E fileConvertType, ResultOptions resultOptions,OptionResult optionResult){
         boolean result = this.doHandler(in, out, fileConvertType, resultOptions, optionResult);
