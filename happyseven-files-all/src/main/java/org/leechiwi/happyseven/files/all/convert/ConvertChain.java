@@ -1,4 +1,4 @@
-package org.leechiwi.happyseven.files.all.convert.impl;
+package org.leechiwi.happyseven.files.all.convert;
 
 import org.leechiwi.happyseven.files.all.convert.handlers.ConvertChainHandler;
 import org.leechiwi.happyseven.files.all.ChainBuilder;

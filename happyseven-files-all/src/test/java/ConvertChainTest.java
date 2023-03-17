@@ -5,7 +5,7 @@ import org.leechiwi.happyseven.files.all.convert.handlers.impl.ImagesToBarcodeHa
 import org.leechiwi.happyseven.files.all.convert.handlers.impl.PdfInnerImagesHandler;
 import org.leechiwi.happyseven.files.all.convert.handlers.impl.PdfToAnyHandler;
 import org.leechiwi.happyseven.files.all.convert.handlers.impl.SlideToPdfHandler;
-import org.leechiwi.happyseven.files.all.convert.impl.ConvertChain;
+import org.leechiwi.happyseven.files.all.convert.ConvertChain;
 import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.base.enums.ResultOptions;
 import org.leechiwi.happyseven.files.pdf.enums.PdfConvertType;
