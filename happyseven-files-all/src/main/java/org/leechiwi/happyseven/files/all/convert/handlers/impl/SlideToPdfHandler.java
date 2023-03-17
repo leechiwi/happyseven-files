@@ -1,6 +1,6 @@
-package org.leechiwi.happyseven.files.all.convert.handlers;
+package org.leechiwi.happyseven.files.all.convert.handlers.impl;
 
-import org.leechiwi.happyseven.files.all.convert.ConvertChainHandler;
+import org.leechiwi.happyseven.files.all.convert.handlers.ConvertChainHandler;
 import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.base.enums.ResultOptions;
 import org.leechiwi.happyseven.files.pdf.enums.PdfConvertType;

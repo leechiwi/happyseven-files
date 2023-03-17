@@ -1,8 +1,8 @@
 package org.leechiwi.happyseven.files.all.convert.impl;
 
-import org.leechiwi.happyseven.files.all.convert.ConvertChainHandler;
-import org.leechiwi.happyseven.files.all.convert.builder.ChainBuilder;
-import org.leechiwi.happyseven.files.all.convert.builder.impl.ConvertHandlerChainBuilder;
+import org.leechiwi.happyseven.files.all.convert.handlers.ConvertChainHandler;
+import org.leechiwi.happyseven.files.all.ChainBuilder;
+import org.leechiwi.happyseven.files.all.convert.builder.ConvertHandlerChainBuilder;
 import org.leechiwi.happyseven.files.base.File;
 import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.base.enums.ResultOptions;

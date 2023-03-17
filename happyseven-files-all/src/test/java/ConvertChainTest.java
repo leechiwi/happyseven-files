@@ -1,10 +1,10 @@
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
-import org.leechiwi.happyseven.files.all.convert.ConvertChainHandler;
-import org.leechiwi.happyseven.files.all.convert.handlers.ImagesToBarcodeHandler;
-import org.leechiwi.happyseven.files.all.convert.handlers.PdfInnerImagesHandler;
-import org.leechiwi.happyseven.files.all.convert.handlers.PdfToAnyHandler;
-import org.leechiwi.happyseven.files.all.convert.handlers.SlideToPdfHandler;
+import org.leechiwi.happyseven.files.all.convert.handlers.ConvertChainHandler;
+import org.leechiwi.happyseven.files.all.convert.handlers.impl.ImagesToBarcodeHandler;
+import org.leechiwi.happyseven.files.all.convert.handlers.impl.PdfInnerImagesHandler;
+import org.leechiwi.happyseven.files.all.convert.handlers.impl.PdfToAnyHandler;
+import org.leechiwi.happyseven.files.all.convert.handlers.impl.SlideToPdfHandler;
 import org.leechiwi.happyseven.files.all.convert.impl.ConvertChain;
 import org.leechiwi.happyseven.files.base.entity.OptionResult;
 import org.leechiwi.happyseven.files.base.enums.ResultOptions;

@@ -1,7 +1,7 @@
-package org.leechiwi.happyseven.files.all.convert.builder.impl;
+package org.leechiwi.happyseven.files.all.convert.builder;
 
-import org.leechiwi.happyseven.files.all.convert.ConvertChainHandler;
-import org.leechiwi.happyseven.files.all.convert.builder.ChainBuilder;
+import org.leechiwi.happyseven.files.all.convert.handlers.ConvertChainHandler;
+import org.leechiwi.happyseven.files.all.ChainBuilder;
 
 import java.util.List;
 
