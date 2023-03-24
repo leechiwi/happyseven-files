@@ -43,6 +43,7 @@ public class ApPdf extends PdfLicense implements Pdf<Document> {
         try {
             Document document = new Document(in);
             document.save(out, new ApPdfConvertTypeFactory().convertPdfConvertType(pdfConvertType));
+            document.close();
         } catch (Exception e) {
             log.error("aspose pdf convert stream error", e);
             return false;

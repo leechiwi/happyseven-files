@@ -57,6 +57,7 @@ public class ApImage extends ImageLicense implements Image {
         try {
             com.aspose.imaging.Image image = createImage(sourceImageformat, in);
             image.save(out, new ApImageConvertTypeFactory(this.width,this.height,this.pages,this.image).convertImageConvertType(imageConvertType));
+            image.close();
         } catch (HappysevenException e) {
             log.error("aspose image convert stream error");
             return false;
@@ -69,6 +70,7 @@ public class ApImage extends ImageLicense implements Image {
         try {
             com.aspose.imaging.Image image =createImage(sourceImageformat, in);
             image.save(out, new ApImageConvertTypeFactory(this.width,this.height,this.pages,this.image).convertImageConvertType(imageConvertType));
+            image.close();
         } catch (HappysevenException e) {
             log.error("aspose image convert path error");
             return false;
@@ -91,8 +93,8 @@ public class ApImage extends ImageLicense implements Image {
     @Override
     public boolean convertAll(OutputStream out, ImageConvertType imageConvertType, OptionResult optionResult) {
         try {
-
             this.image.save(out,new ApImageConvertTypeFactory(this.width,this.height,this.pages,this.image).convertImageConvertType(imageConvertType));
+            image.close();
         } catch (Exception e) {
             log.error("aspose image convert all error",e);
             return false;

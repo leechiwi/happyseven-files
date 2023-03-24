@@ -7,11 +7,15 @@ import org.leechiwi.happyseven.files.pdf.ap.proxy.ApPdfInnerImagesProxy;
 import org.leechiwi.happyseven.files.pdf.ap.proxy.ApPdfProxy;
 import org.leechiwi.happyseven.files.pdf.ap.decorators.ApPdfImagesDecorator;
 import org.leechiwi.happyseven.files.pdf.enums.PdfConvertType;
+import org.leechiwi.happyseven.files.pdf.itextpdf.ItextPdf;
+import org.leechiwi.happyseven.files.pdf.itextpdf.model.PdfTemplateElement;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -51,6 +55,33 @@ public class ApPdfTest {
         try {
             out = new FileOutputStream(new File("d:/test.zip"));
             boolean convert = new ApPdfInnerImagesProxy("d:/test.pdf", ResultOptions.ALL_IN_ZIP,true).convertAll(out, PdfConvertType.JPEG,null);
+            System.out.println("result=" + convert);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }finally{
+            IOUtils.closeQuietly(out);
+        }
+    }
+    @Test
+    public void convertWithPdfTemplate() {
+        FileOutputStream out=null;
+        try {
+            Map<String, String> data = new HashMap<String, String>();
+            data.put("fy", "最高人民法院");
+            data.put("ah", "(2018)最高法民终xxxx号");
+            data.put("fy2", "最高人民法院");
+            data.put("ah2", "(2018)最高法民终xxxx号");
+            data.put("dsr", "张奕 等");
+            data.put("dsrxx", "张奕，性别：男性，身份证号：xxxxxxxxxxxxxxxxxx");
+            data.put("fg","张法官");
+            data.put("fgdh", "13212345678");
+            data.put("nf", "2023");
+            data.put("yf", "02");
+            data.put("rf", "23");
+            PdfTemplateElement pdfTemplateElement=new PdfTemplateElement();
+            pdfTemplateElement.setDataMap(data);
+            out = new FileOutputStream(new File("d:/test.pdf"));
+            boolean convert =new ItextPdf("d:/协助调查通知书-复制.pdf",pdfTemplateElement).convertAll(out,PdfConvertType.PDF,null);
             System.out.println("result=" + convert);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
