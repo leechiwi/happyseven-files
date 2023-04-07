@@ -9,10 +9,13 @@ import org.leechiwi.happyseven.files.pdf.ap.decorators.ApPdfImagesDecorator;
 import org.leechiwi.happyseven.files.pdf.enums.PdfConvertType;
 import org.leechiwi.happyseven.files.pdf.itextpdf.ItextPdf;
 import org.leechiwi.happyseven.files.pdf.itextpdf.model.PdfTemplateElement;
+import org.leechiwi.happyseven.files.pdf.itextpdf.model.RowAndColSpan;
+import org.leechiwi.happyseven.files.pdf.itextpdf.template.enums.PdfTemplateType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,22 +69,73 @@ public class ApPdfTest {
     public void convertWithPdfTemplate() {
         FileOutputStream out=null;
         try {
-            Map<String, String> data = new HashMap<String, String>();
-            data.put("fy", "最高人民法院");
+            //-----------------------------模板根据key填充------------------------------------------
+            /*Map<String, String> data = new HashMap<String, String>();
+            data.put("bt", "最高人民法院协助调查通知书");
             data.put("ah", "(2018)最高法民终xxxx号");
-            data.put("fy2", "最高人民法院");
-            data.put("ah2", "(2018)最高法民终xxxx号");
+            data.put("fy", "最高人民法院");
+            data.put("ah1", "(2018)最高法民终xxxx号");
             data.put("dsr", "张奕 等");
-            data.put("dsrxx", "张奕，性别：男性，身份证号：xxxxxxxxxxxxxxxxxx");
+            data.put("dsrxx", "张奕，性别：男性，身份证号：xxxxxxxxxxxxxxxxxx;");
             data.put("fg","张法官");
             data.put("fgdh", "13212345678");
-            data.put("nf", "2023");
-            data.put("yf", "02");
-            data.put("rf", "23");
+            data.put("rq", "2023年03月30日");
             PdfTemplateElement pdfTemplateElement=new PdfTemplateElement();
             pdfTemplateElement.setDataMap(data);
             out = new FileOutputStream(new File("d:/test.pdf"));
-            boolean convert =new ItextPdf("d:/协助调查通知书-复制.pdf",pdfTemplateElement).convertAll(out,PdfConvertType.PDF,null);
+            boolean convert =new ItextPdf("d:/pdf.pdf",pdfTemplateElement, PdfTemplateType.PURE_TEXT).convertAll(out,PdfConvertType.PDF,null);
+            System.out.println("result=" + convert);*/
+            //-----------------------------跨行跨列的表格-------------------------------------------
+     /*       PdfTemplateElement pdfTemplateElement=new PdfTemplateElement();
+            List<RowAndColSpan> list = new ArrayList<>();
+            RowAndColSpan rc1 = new RowAndColSpan(1,2,2,3);
+            RowAndColSpan rc2 = new RowAndColSpan(1,2,4,5);
+            RowAndColSpan rc3 = new RowAndColSpan(4,5,2,2);
+            RowAndColSpan rc4 = new RowAndColSpan(5,6,4,5);
+            list.add(rc1);
+            list.add(rc2);
+            list.add(rc3);
+            list.add(rc4);
+            pdfTemplateElement.setRowAndColSpanList(list);
+            float[] width={30,30,40,40,30};
+            pdfTemplateElement.setColumnWidth(width);
+            List<String> list1 = Stream.of("1", "2", "3").collect(Collectors.toList());
+            List<String> list2 = Stream.of("4").collect(Collectors.toList());//, "5", "6"
+            List<String> list3 = Stream.of("7","8", "9", "10", "11").collect(Collectors.toList());
+            List<String> list4 = Stream.of("12","13", "14", "15", "16").collect(Collectors.toList());
+            List<String> list5 = Stream.of("17","19", "20").collect(Collectors.toList());//, "18", "21"
+            List<String> list6 = Stream.of("22","23", "24").collect(Collectors.toList());//, "25", "26"
+            List<List<String>> allRowList = new ArrayList<>();
+            allRowList.add(list1);
+            allRowList.add(list2);
+            allRowList.add(list3);
+            allRowList.add(list4);
+            allRowList.add(list5);
+            allRowList.add(list6);
+            pdfTemplateElement.setTableDataList(allRowList);
+            out = new FileOutputStream(new File("d:/test.pdf"));
+            boolean convert =new ItextPdf("d:/blank.pdf",pdfTemplateElement, PdfTemplateType.TABLE).convertAll(out,PdfConvertType.PDF,null);
+            System.out.println("result=" + convert);*/
+            //------------------------------常规表格------------------------------------------
+            PdfTemplateElement pdfTemplateElement=new PdfTemplateElement();
+            float[] width={30,30,40,40,30};
+            List<String> header = Stream.of("序号","姓名", "年龄", "生日", "备注").collect(Collectors.toList());
+            List<List<String>> allRowList = new ArrayList<>();
+            allRowList.add(header);
+                List<String> dataList =null;
+            for (int i = 0; i < 50; i++) {
+                if(i%5==0){
+                    dataList = new ArrayList<>();
+                }
+                dataList.add((i+1)+"");
+                if(dataList.size()==5){
+                    allRowList.add(dataList);
+                }
+            }
+            pdfTemplateElement.setColumnWidth(width);
+            pdfTemplateElement.setTableDataList(allRowList);
+            out = new FileOutputStream(new File("d:/test.pdf"));
+            boolean convert =new ItextPdf("d:/blank.pdf",pdfTemplateElement, PdfTemplateType.TABLE).convertAll(out,PdfConvertType.PDF,null);
             System.out.println("result=" + convert);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
