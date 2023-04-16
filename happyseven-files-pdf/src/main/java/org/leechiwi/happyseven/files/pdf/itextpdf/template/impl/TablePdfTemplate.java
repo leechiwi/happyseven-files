@@ -4,28 +4,32 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.leechiwi.happyseven.files.base.util.Base64;
 import org.leechiwi.happyseven.files.pdf.itextpdf.model.PdfTemplateElement;
 import org.leechiwi.happyseven.files.pdf.itextpdf.model.RowAndColSpan;
 import org.leechiwi.happyseven.files.pdf.itextpdf.model.TableExtendInfo;
-import org.leechiwi.happyseven.files.pdf.itextpdf.template.PdfTemplate;
+import org.leechiwi.happyseven.files.pdf.itextpdf.template.AbstractPdfTemplate;
+import org.leechiwi.happyseven.files.pdf.itextpdf.template.enums.PdfImageType;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 @Slf4j
-public class TablePdfTemplate implements PdfTemplate {
-    private InputStream inputStream;
-    private PdfTemplateElement pdfTemplateElement;
+public class TablePdfTemplate extends AbstractPdfTemplate {
     private Map<String, TableExtendInfo> rowAndColSpanMap;
     private Map<String, TableExtendInfo> allRowAndColSpanMap;
     private Map<Integer, Integer> colLeftOfRow;
 
+    public Map<Integer, Integer> getColLeftOfRow() {
+        return colLeftOfRow;
+    }
+
     public TablePdfTemplate(InputStream inputStream, PdfTemplateElement pdfTemplateElement) {
-        this.inputStream = inputStream;
-        this.pdfTemplateElement = pdfTemplateElement;
+        super(inputStream,pdfTemplateElement);
         init();
     }
 
@@ -88,7 +92,7 @@ public class TablePdfTemplate implements PdfTemplate {
     }
 
     @Override
-    public boolean create(OutputStream out) {
+    public boolean doCreate(OutputStream out) {
         Document document = null;
         PdfReader reader = null;
         try {
@@ -175,7 +179,25 @@ public class TablePdfTemplate implements PdfTemplate {
     //为一个表格添加内容
     private PdfPCell createSetCell(String value, Font font) {
         PdfPCell cell = new PdfPCell();
-        cell.setPhrase(new Phrase(value, font));
+        try {
+            if(value.startsWith(PdfImageType.FILENAME.getName())){
+                cell.setImage(Image.getInstance(value.replace(PdfImageType.FILENAME.getName(),StringUtils.EMPTY)));
+            }else if(value.startsWith(PdfImageType.URL.getName())){
+                cell.setImage(Image.getInstance(value.replace(PdfImageType.URL.getName(),StringUtils.EMPTY)));
+            }else if(value.startsWith(PdfImageType.BASE64.getName())){
+                String base64 = value.replace(PdfImageType.BASE64.getName(), StringUtils.EMPTY);
+                byte[] bytes = Base64.decodeBase64(base64);
+                cell.setImage(Image.getInstance(bytes));
+            }else {
+                cell.setPhrase(new Phrase(value, font));
+            }
+        } catch (BadElementException e) {
+            cell.setPhrase(new Phrase("bad image", font));
+            log.error("cell add image fail",e);
+        } catch (IOException e) {
+            cell.setPhrase(new Phrase("bad image", font));
+            log.error("cell add image fail",e);
+        }
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setFixedHeight(pdfTemplateElement.getColumnHeight());

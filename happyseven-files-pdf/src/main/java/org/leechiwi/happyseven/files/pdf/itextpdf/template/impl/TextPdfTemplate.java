@@ -6,6 +6,7 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import lombok.extern.slf4j.Slf4j;
 import org.leechiwi.happyseven.files.pdf.itextpdf.model.PdfTemplateElement;
+import org.leechiwi.happyseven.files.pdf.itextpdf.template.AbstractPdfTemplate;
 import org.leechiwi.happyseven.files.pdf.itextpdf.template.PdfTemplate;
 
 import java.io.InputStream;
@@ -14,17 +15,14 @@ import java.util.ArrayList;
 import java.util.Map;
 
 @Slf4j
-public class TextPdfTemplate implements PdfTemplate {
-    private InputStream inputStream;
-    private PdfTemplateElement pdfTemplateElement;
+public class TextPdfTemplate extends AbstractPdfTemplate {
 
     public TextPdfTemplate(InputStream inputStream, PdfTemplateElement pdfTemplateElement) {
-        this.inputStream = inputStream;
-        this.pdfTemplateElement = pdfTemplateElement;
+        super(inputStream,pdfTemplateElement);
     }
 
     @Override
-    public boolean create(OutputStream out) {
+    public boolean doCreate(OutputStream out) {
         // 1.指定解析器
         //System.setProperty("javax.xml.parsers.DocumentBuilderFactory",
         // "com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl");
