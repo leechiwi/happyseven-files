@@ -1,3 +1,7 @@
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.PdfPCell;
+import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -9,9 +13,11 @@ import org.leechiwi.happyseven.files.pdf.ap.proxy.ApPdfProxy;
 import org.leechiwi.happyseven.files.pdf.ap.decorators.ApPdfImagesDecorator;
 import org.leechiwi.happyseven.files.pdf.enums.PdfConvertType;
 import org.leechiwi.happyseven.files.pdf.itextpdf.ItextPdf;
+import org.leechiwi.happyseven.files.pdf.itextpdf.handler.CellHandler;
 import org.leechiwi.happyseven.files.pdf.itextpdf.model.PdfTemplateElement;
 import org.leechiwi.happyseven.files.pdf.itextpdf.model.RowAndColSpan;
 import org.leechiwi.happyseven.files.pdf.itextpdf.template.annotation.PdfField;
+import org.leechiwi.happyseven.files.pdf.itextpdf.template.enums.PdfImageType;
 import org.leechiwi.happyseven.files.pdf.itextpdf.template.enums.PdfTemplateType;
 import org.leechiwi.happyseven.files.pdf.itextpdf.template.impl.proxy.TablePdfTemplateProxy;
 
@@ -19,21 +25,24 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ApPdfTest {
     @Data
     private static class DemoBean {
+        @PdfField(order = 0,fontSize = 15,fontStype = Font.BOLD,borderSide = 15,columnHeight = 90)
+        private String title;
         @PdfField(order = 1)
         private Integer index;
-        @PdfField(order = 3)
+        @PdfField(order = 3,prefix = "age")
         private Integer age;
         @PdfField(order = 2)
         private String name;
         @PdfField(order = 4)
         private Date birthDay;
-        @PdfField(order = 5, label = "电话1")
+        @PdfField(order = 5, label = "电话1",columnHeight = 50)
         private String phone1;
         @PdfField(order = 6, label = "电话2")
         private String phone2;
@@ -59,7 +68,45 @@ public class ApPdfTest {
         private String doBest2;
         @PdfField(order = 17)
         private String doBest3;
+        @PdfField(order = 18)
+        private String image1;
+        @PdfField(order = 19)
+        private String image2;
+        @PdfField(order = 20,imageType = PdfImageType.FILENAME)
+        private String image;
+        @PdfField(order = 21)
+        private String image3;
+        @PdfField(order = 22)
+        private String image4;
+        @PdfField(order = 21)
+        private String image5;
+        @PdfField(order = 22)
+        private String image6;
+        @PdfField(order = 23)
+        private String image7;
+        @PdfField(order = 24)
+        private String image8;
+        @PdfField(order = 27)
+        private String blank;
+        @PdfField(order = 28)
+        private DemoBean2 demoBean2;
+        @PdfField(order = 25,nullLoaded = true)
+        private String indexall;
+        @PdfField(order = 26,nullLoaded = true)
+        private List<DemoBean2> demoBeanList;
 
+    }
+    @Data
+    @Builder
+    private static class DemoBean2 {
+        @PdfField(order = 1,nullLoaded = true)
+        private String name;
+        @PdfField(order = 3,nullLoaded = true)
+        private Integer age;
+        @PdfField(order = 4,nullLoaded = true)
+        private Date birthday;
+        @PdfField(order = 5,nullLoaded = true)
+        private String phone;
     }
 
     @Test
@@ -159,7 +206,7 @@ public class ApPdfTest {
             boolean convert =new ItextPdf("d:/blank.pdf",pdfTemplateElement, PdfTemplateType.TABLE).convertAll(out,PdfConvertType.PDF,null);
             System.out.println("result=" + convert);*/
             //------------------------------常规表格------------------------------------------
-/*            PdfTemplateElement pdfTemplateElement=new PdfTemplateElement();
+            /*PdfTemplateElement pdfTemplateElement=new PdfTemplateElement();
             float[] width={30,30,40,40,30};
             List<String> header = Stream.of("序号","姓名", "年龄", "生日", "备注").collect(Collectors.toList());
             List<List<String>> allRowList = new ArrayList<>();
@@ -187,18 +234,23 @@ public class ApPdfTest {
             //-----------------------------跨行跨列的表格实体-------------------------------------------
             PdfTemplateElement pdfTemplateElement = new PdfTemplateElement();
             List<RowAndColSpan> list = new ArrayList<>();
-            RowAndColSpan rc1 = new RowAndColSpan(1, 2, 2, 3);
-            RowAndColSpan rc2 = new RowAndColSpan(1, 2, 4, 5);
-            RowAndColSpan rc3 = new RowAndColSpan(4, 5, 2, 2);
-            RowAndColSpan rc4 = new RowAndColSpan(5, 6, 4, 5);
+            RowAndColSpan rc6 = new RowAndColSpan(1, 1, 1, 5);
+            RowAndColSpan rc1 = new RowAndColSpan(2, 3, 2, 3);
+            RowAndColSpan rc2 = new RowAndColSpan(2, 3, 4, 5);
+            RowAndColSpan rc3 = new RowAndColSpan(5, 6, 2, 2);
+            RowAndColSpan rc4 = new RowAndColSpan(6, 7, 4, 5);
+            RowAndColSpan rc5 = new RowAndColSpan(8, 11, 3, 5);
             list.add(rc1);
             list.add(rc2);
             list.add(rc3);
             list.add(rc4);
-            pdfTemplateElement.setRowAndColSpanList(list);
+            list.add(rc5);
+            list.add(rc6);
+            //pdfTemplateElement.setRowAndColSpanList(list);
             float[] width = {30, 30, 40, 40, 30};
             pdfTemplateElement.setColumnWidth(width);
             DemoBean demoBean = new DemoBean();
+            demoBean.setTitle("个人介绍");
             demoBean.setIndex(1);
             demoBean.setName("张三");
             demoBean.setAge(27);
@@ -216,7 +268,47 @@ public class ApPdfTest {
             demoBean.setDoBest1("抽烟");
             demoBean.setDoBest2("喝酒");
             demoBean.setDoBest3("敲代码");
+            demoBean.setImage1("image1");
+            demoBean.setImage2("image2");
+            demoBean.setImage("d:/qrcode.png");
+            demoBean.setImage3("image3");
+            demoBean.setImage4("image4");
+            demoBean.setImage5("image5");
+            demoBean.setImage6("image6");
+            demoBean.setImage7("image7");
+            demoBean.setImage8("image8");
+            demoBean.setBlank("blank");
+            DemoBean2 demoBean2 = DemoBean2.builder()
+                    .age(23)
+                    .birthday(new Date())
+                    .name("happyseven")
+                    .phone("18688888888").build();
+            demoBean.setDemoBean2(demoBean2);
+            demoBean.setIndexall("110");
+            DemoBean2 demoBeanLst1 = DemoBean2.builder()
+                    .age(24)
+                    .birthday(new Date())
+                    .name("happyseven1")
+                    .phone("18688888888").build();
+            DemoBean2 demoBeanLst2 = DemoBean2.builder()
+                    .age(25)
+                    .birthday(new Date())
+                    .name("happyseven2")
+                    .phone("18688888889").build();
+            demoBean.setDemoBeanList(Stream.of(demoBeanLst1,demoBeanLst2).collect(Collectors.toList()));
+            RowAndColSpan rc7 = new RowAndColSpan(12, 12+demoBean.getDemoBeanList().size()-1, 1, 1);
+            list.add(rc7);
+            pdfTemplateElement.setRowAndColSpanList(list);
             pdfTemplateElement.setObject(demoBean);
+            CellHandler cellHandler= (cellElement, cell)->{
+                if(cellElement.getPrefix().equals("age")){
+                    String content = cell.getPhrase().getContent();
+                    if(Integer.valueOf(content)>18){
+                        cell.setBackgroundColor(BaseColor.RED);
+                    }
+                }
+            };
+            pdfTemplateElement.setCellHandler(cellHandler);
             out = new FileOutputStream(new File("d:/test.pdf"));
             boolean convert = new ItextPdf("d:/blank.pdf", pdfTemplateElement, PdfTemplateType.OBJECT_TABLE).convertAll(out, PdfConvertType.PDF, null);
             System.out.println("result=" + convert);

@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.leechiwi.happyseven.files.base.util.Base64;
+import org.leechiwi.happyseven.files.pdf.itextpdf.handler.CellHandler;
+import org.leechiwi.happyseven.files.pdf.itextpdf.model.CellElement;
 import org.leechiwi.happyseven.files.pdf.itextpdf.model.PdfTemplateElement;
 import org.leechiwi.happyseven.files.pdf.itextpdf.model.RowAndColSpan;
 import org.leechiwi.happyseven.files.pdf.itextpdf.model.TableExtendInfo;
@@ -15,6 +17,7 @@ import org.leechiwi.happyseven.files.pdf.itextpdf.template.enums.PdfImageType;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.List;
 import java.util.*;
 
@@ -29,7 +32,7 @@ public class TablePdfTemplate extends AbstractPdfTemplate {
     }
 
     public TablePdfTemplate(InputStream inputStream, PdfTemplateElement pdfTemplateElement) {
-        super(inputStream,pdfTemplateElement);
+        super(inputStream, pdfTemplateElement);
         init();
     }
 
@@ -38,7 +41,7 @@ public class TablePdfTemplate extends AbstractPdfTemplate {
         rowAndColSpanMap = new HashMap<>();
         colLeftOfRow = new HashMap<>();
         allRowAndColSpanMap = new HashMap<>();
-        if(CollectionUtils.isEmpty(rowAndColSpanList)){
+        if (CollectionUtils.isEmpty(rowAndColSpanList)) {
             return;
         }
         for (RowAndColSpan rowAndColSpan : rowAndColSpanList) {
@@ -50,7 +53,7 @@ public class TablePdfTemplate extends AbstractPdfTemplate {
         for (int i = rowAndColSpan.getRowSpanStart(); i <= rowAndColSpan.getRowSpanEnd(); i++) {
             TableExtendInfo tableExtendInfo = new TableExtendInfo(rowAndColSpan.getRowSpanStart(), rowAndColSpan.getColSpanStart());
             tableExtendInfo.setExtendRow(true);
-            boolean firstRow=(i == rowAndColSpan.getRowSpanStart());
+            boolean firstRow = (i == rowAndColSpan.getRowSpanStart());
             if (firstRow) {
                 tableExtendInfo.setRowFirst(true);
                 tableExtendInfo.setRowSpan(rowAndColSpan.getRowSpanEnd() - rowAndColSpan.getRowSpanStart() + 1);
@@ -60,11 +63,11 @@ public class TablePdfTemplate extends AbstractPdfTemplate {
             if (Objects.isNull(colLeftOfRow.get(i))) {
                 colLeftOfRow.put(i, pdfTemplateElement.getColumnWidth().length);
             }
-            initColumn(rowAndColSpan, i,firstRow);
+            initColumn(rowAndColSpan, i, firstRow);
         }
     }
 
-    private void initColumn(RowAndColSpan rowAndColSpan, Integer index,boolean firstRow) {
+    private void initColumn(RowAndColSpan rowAndColSpan, Integer index, boolean firstRow) {
         TableExtendInfo tableExtendInfo = rowAndColSpanMap.get(index.toString());
         for (int j = rowAndColSpan.getColSpanStart(); j <= rowAndColSpan.getColSpanEnd(); j++) {
             TableExtendInfo tableExtendInfoCloned = null;
@@ -78,13 +81,13 @@ public class TablePdfTemplate extends AbstractPdfTemplate {
                 tableExtendInfoCloned.setColFirst(true);
                 int merged = rowAndColSpan.getColSpanEnd() - rowAndColSpan.getColSpanStart() + 1;
                 tableExtendInfoCloned.setColSpan(merged);
-                if(firstRow) {
+                if (firstRow) {
                     colLeftOfRow.put(index, colLeftOfRow.get(index) - merged + 1);
                 }
                 rowAndColSpanMap.put(tableExtendInfoCloned.getRowStart() + "&" + tableExtendInfoCloned.getColStart(), tableExtendInfoCloned);
             }
-            if(!firstRow){
-                colLeftOfRow.put(index, colLeftOfRow.get(index)-1);
+            if (!firstRow) {
+                colLeftOfRow.put(index, colLeftOfRow.get(index) - 1);
             }
             allRowAndColSpanMap.put(tableExtendInfoCloned.getRowStart() + "&" + tableExtendInfoCloned.getColStart(), tableExtendInfoCloned);
         }
@@ -123,6 +126,29 @@ public class TablePdfTemplate extends AbstractPdfTemplate {
         return true;
     }
 
+    private List<List<CellElement>> convertDataToCellElement() throws IOException, DocumentException {
+        if (CollectionUtils.isNotEmpty(pdfTemplateElement.getTableCellList())) {
+            return pdfTemplateElement.getTableCellList();
+        }
+        List<List<String>> dataList = pdfTemplateElement.getTableDataList();
+        //定义数据的字体
+        BaseFont baseFont = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+        Font textFont = new Font(baseFont, 10, Font.NORMAL);
+        List<List<CellElement>> result = new ArrayList<>();
+        for (int i = 0; i < dataList.size(); i++) {
+            List<String> columns = dataList.get(i);
+            List<CellElement> cellElementList = new ArrayList<>();
+            for (int j = 0; j < columns.size(); j++) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(i).append("&").append(j);
+                CellElement cellElement = new CellElement(columns.get(j), textFont, 0, 30, Element.ALIGN_MIDDLE, Element.ALIGN_CENTER, sb.toString());
+                cellElementList.add(cellElement);
+            }
+            result.add(cellElementList);
+        }
+        return result;
+    }
+
     private void createTable(PdfWriter writer, Document document) throws DocumentException, IOException {
         PdfPTable table = new PdfPTable(this.pdfTemplateElement.getColumnWidth());
         table.setTotalWidth(520);
@@ -133,20 +159,18 @@ public class TablePdfTemplate extends AbstractPdfTemplate {
         //每页都显示表头,输入几就是第几行的表头固定
         //table.setHeaderRows(2);
         //table.setHeaderRows(3);
-        //定义数据的字体
-        BaseFont baseFont = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
-        Font textFont = new Font(baseFont, 10, Font.NORMAL);
-        List<List<String>> dataList = pdfTemplateElement.getTableDataList();
+        List<List<CellElement>> tableCellList = convertDataToCellElement();
         int length = pdfTemplateElement.getColumnWidth().length;
-        for (int i = 0; i < dataList.size(); i++) {
+        for (int i = 0; i < tableCellList.size(); i++) {
             int colIndex = 0;
-            List<String> columns = dataList.get(i);
+            List<CellElement> cellElements = tableCellList.get(i);
             Integer left = colLeftOfRow.get(i + 1);
             for (int j = 0; j < length; j++) {
                 if (Objects.nonNull(left) && left == colIndex) {
                     break;
                 }
-                PdfPCell setCell = createSetCell(columns.get(colIndex), textFont);
+                CellElement cellElement = cellElements.get(colIndex);
+                PdfPCell setCell = createSetCell(cellElement);
                 TableExtendInfo tableExtendInfo = rowAndColSpanMap.get((i + 1) + "&" + (j + 1));
                 if (Objects.nonNull(left) && left < length || Optional.ofNullable(tableExtendInfo).map(TableExtendInfo::isExtendRow).orElse(false)) {//该行有合并(行和列的都算)
                     TableExtendInfo allTableExtendInfo = allRowAndColSpanMap.get((i + 1) + "&" + (j + 1));
@@ -165,7 +189,7 @@ public class TablePdfTemplate extends AbstractPdfTemplate {
                         if (tableExtendInfo.isRowFirst()) {
                             setCell.setRowspan(tableExtendInfo.getRowSpan());
                         }
-                    } else {
+                    } else {//虽然有合并但在被合并的范围内且不是被合并列的起始列则不需要创建单元格，因为已经在起始列被设置成合并了
                         continue;
                     }
                 }
@@ -177,30 +201,40 @@ public class TablePdfTemplate extends AbstractPdfTemplate {
     }
 
     //为一个表格添加内容
-    private PdfPCell createSetCell(String value, Font font) {
+    private PdfPCell createSetCell(CellElement cellElement) {
+        String value = cellElement.getText();
+        Font font = cellElement.getFont();
         PdfPCell cell = new PdfPCell();
+        cell.disableBorderSide(cellElement.getBorderSide());
         try {
-            if(value.startsWith(PdfImageType.FILENAME.getName())){
-                cell.setImage(Image.getInstance(value.replace(PdfImageType.FILENAME.getName(),StringUtils.EMPTY)));
-            }else if(value.startsWith(PdfImageType.URL.getName())){
-                cell.setImage(Image.getInstance(value.replace(PdfImageType.URL.getName(),StringUtils.EMPTY)));
-            }else if(value.startsWith(PdfImageType.BASE64.getName())){
+            if (value.startsWith(PdfImageType.FILENAME.getName())) {
+                cell.setImage(Image.getInstance(value.replace(PdfImageType.FILENAME.getName(), StringUtils.EMPTY)));
+            } else if (value.startsWith(PdfImageType.URL.getName())) {
+                URL url = new URL(value.replace(PdfImageType.URL.getName(), StringUtils.EMPTY));
+                cell.setImage(Image.getInstance(url));
+            } else if (value.startsWith(PdfImageType.BASE64.getName())) {
                 String base64 = value.replace(PdfImageType.BASE64.getName(), StringUtils.EMPTY);
                 byte[] bytes = Base64.decodeBase64(base64);
                 cell.setImage(Image.getInstance(bytes));
-            }else {
+            } else {
                 cell.setPhrase(new Phrase(value, font));
             }
         } catch (BadElementException e) {
             cell.setPhrase(new Phrase("bad image", font));
-            log.error("cell add image fail",e);
+            log.error("cell add image fail", e);
         } catch (IOException e) {
             cell.setPhrase(new Phrase("bad image", font));
-            log.error("cell add image fail",e);
+            log.error("cell add image fail", e);
         }
-        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setFixedHeight(pdfTemplateElement.getColumnHeight());
+        cell.setVerticalAlignment(cellElement.getVerticalAlign());
+        cell.setHorizontalAlignment(cellElement.getHorizontalAlign());
+        cell.setFixedHeight(cellElement.getColumnHeight());
+        //cell.setCellEvent(new Cellhandler(cellElement));
+        //cell.setBackgroundColor();
+        CellHandler cellHandler = pdfTemplateElement.getCellHandler();
+        if (Objects.nonNull(cellHandler)) {
+            cellHandler.cell(cellElement, cell);
+        }
         return cell;
     }
 

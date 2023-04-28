@@ -20,27 +20,27 @@ public enum PdfImageType {
     },
     URL("url:"){
         public  String imageToString(Object o){
-            return this.name()+ Objects.toString(o, StringUtils.EMPTY);
+            return this.getName()+ Objects.toString(o, StringUtils.EMPTY);
         }
     },
-    FILENAME("filename"){
+    FILENAME("filename:"){
         public  String imageToString(Object o){
-            return this.name()+(String)o;
+            return this.getName()+(String)o;
         }
     },
     BYTE("base64:"){
         public  String imageToString(Object o){
-            return this.name()+ Base64.encodeBase64((byte[])o);
+            return this.getName()+ Base64.encodeBase64((byte[])o);
         }
     },
     BASE64("base64:"){
         public  String imageToString(Object o){
-            return this.name()+ Objects.toString(o, StringUtils.EMPTY);
+            return this.getName()+ Objects.toString(o, StringUtils.EMPTY);
         }
     },
     STREAM("base64:"){
         public  String imageToString(Object o){
-            return this.name()+Base64.inputStreamToBase64((InputStream)o);
+            return this.getName()+Base64.inputStreamToBase64((InputStream)o);
         }
     };
     private String name;
